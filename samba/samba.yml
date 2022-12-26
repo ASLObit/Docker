@@ -31,7 +31,12 @@ services:
       - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
       - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
       - /var/lib/docker/volumes/samba_data/log:/var/log/samba
-    command: '-s "AnimeMovies;/AnimeMovies;yes;no;no;ASLO" -s "AnimeSeries;/AnimeSeries;yes;no;no;ASLO" -s "Marvel;/Marvel;yes;no;no;ASLO" -s "Movies;/Movies;yes;no;no;ASLO" -s "Series;/Series;yes;no;no;ASLO" -u "ASLO;Andres...1990" -p'
+    command: '-s "AnimeMovies;/AnimeMovies;yes;no;no;aslo" \
+              -s "AnimeSeries;/AnimeSeries;yes;no;no;aslo" \
+              -s "Marvel;/Marvel;yes;no;no;aslo" \
+              -s "Movies;/Movies;yes;no;no;aslo" \
+              -s "Series;/Series;yes;no;no;aslo" \
+              -u "aslo;Andres...1990" -p'
 
 networks:
   default:
