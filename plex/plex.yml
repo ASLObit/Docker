@@ -8,10 +8,6 @@ services:
       TZ: America/Bogota
       PGID: 1000
       UGID: 1000
-    ports:
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
     volumes:
       - /var/lib/docker/volumes/plex_data/config:/config
       - /var/lib/docker/volumes/plex_data/library:/root/Library
