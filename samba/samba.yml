@@ -1,5 +1,4 @@
 version: '3.7'
-
 services:
   samba:
     container_name: samba
@@ -18,22 +17,17 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
-      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
-      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
-      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
-      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies:z
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries:y
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel:x
+      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies:w
+      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series:v
       - /var/lib/docker/volumes/samba_data/run:/run/samba
       - /var/lib/docker/volumes/samba_data/etc:/etc
       - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
       - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
       - /var/lib/docker/volumes/samba_data/log:/var/log/samba
-    command: '-u "aslo;Andres...1990" -p \
-              -s "AnimeMovies;/AnimeMovies;yes;no;no" \
-              -s "AnimeSeries;/AnimeSeries;yes;no;no" \
-              -s "Marvel;/Marvel;yes;no;no" \
-              -s "Movies;/Movies;yes;no;no" \
-              -s "Series;/Series;yes;no;no"'
+    command: '-u "aslo;Andres...1990" -s "AnimeMovies;/AnimeMovies;yes;no;no"'
 
 networks:
   default:
