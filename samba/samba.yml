@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   samba:
+    container_name: samba
     image: "dperson/samba:latest"
     environment:
       TZ: America/Bogota
