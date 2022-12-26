@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: "linuxserver/qbittorrent:latest"
+    restart: always
+    environment:
+      TZ: America/Bogota
+      PGID: 1000
+      UGID: 1000
+      WEBUI_PORT: 8080
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      - /var/lib/docker/volumes/qbittorrent_data/config:/config
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series
+    #network_mode: host
