@@ -8,6 +8,9 @@ services:
       TZ: America/Bogota
       PGID: 1000
       UGID: 1000
+    expose:
+      - 32400
+      - 33400
     volumes:
       - /var/lib/docker/volumes/plex_data/config:/config
       - /var/lib/docker/volumes/plex_data/library:/root/Library
@@ -18,4 +21,4 @@ services:
       - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
       - /var/lib/docker/volumes/qbittorrent_data/Movies
       - /var/lib/docker/volumes/qbittorrent_data/Series
-    #network_mode: host
+    network_mode: host
