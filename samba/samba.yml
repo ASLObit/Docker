@@ -18,11 +18,11 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies:z
-      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries:y
-      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel:x
-      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies:w
-      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series:v
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
       - /var/lib/docker/volumes/samba_data/run:/run/samba
       - /var/lib/docker/volumes/samba_data/etc:/etc
       - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
