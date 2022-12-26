@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  jdownloader:
+    container_name: jdownloader
+    image: "jlesage/jdownloader-2:stable"
+    restart: yes
+    ports:
+      - 5800:5800
+    volumes:
+      - /var/lib/docker/volumes/jdownloader_data/config:/config
+      - /var/lib/docker/volumes/jdownloader_data/output:/output
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series
+    network_mode: host
