@@ -6,8 +6,6 @@ services:
     image: "dperson/samba:latest"
     environment:
       TZ: America/Bogota
-      PGID: 1000
-      UGID: 1000
     networks:
       - default
     ports:
