@@ -5,8 +5,7 @@ services:
     image: "dperson/samba:latest"
     environment:
       TZ: America/Bogota
-    networks:
-      - default
+    network_mode: host
     ports:
       - 139:139
       - 445:445
@@ -28,6 +27,3 @@ services:
       - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
       - /var/lib/docker/volumes/samba_data/log:/var/log/samba
     command: '-u "aslo;Andres...1990" -s "AnimeMovies;/AnimeMovies;yes;no;no"'
-
-networks:
-  default:
