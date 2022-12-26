@@ -12,7 +12,7 @@ services:
     read_only: true
     tmpfs:
       - /tmp
-    restart: no
+    restart: unless-stopped
     stdin_open: true
     tty: true
     volumes:
