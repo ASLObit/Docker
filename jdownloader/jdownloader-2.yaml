@@ -2,7 +2,7 @@ version: '3.7'
 services:
   jdownloader:
     container_name: jdownloader
-    image: "jlesage/jdownloader-2:stable"
+    image: "jlesage/jdownloader-2:latest"
     restart: always
     environment:
       TZ: America/Bogota
