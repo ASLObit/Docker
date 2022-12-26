@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  qbittorrent:
+    container_name: plex
+    image: "jaymoulin/plex:latest"
+    restart: unless-stopped
+    environment:
+      TZ: America/Bogota
+      PGID: 1000
+      UGID: 1000
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      - /var/lib/docker/volumes/plex_data/config:/config
+      - /var/lib/docker/volumes/plex_data/library:/root/Library
+      - /var/lib/docker/volumes/plex_data/media:/root/media
+      - /var/lib/docker/volumes/plex_data/transcode:/transcode
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series
+    #network_mode: host
