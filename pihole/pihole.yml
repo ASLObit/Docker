@@ -2,26 +2,46 @@ version: "3"
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
   pihole:
-    container_name: pihole
     image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
       - "53:53/tcp"
       - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "80:80/tcp"
-      - "4443:443/tcp"
-    environment:
-      TZ: America/Bogota
-      WEBPASSWORD: 'Andres...1990'
-    # Volumes store your data between container upgrades
-    volumes:
-      - /var/lib/docker/volumes/pihole_data/etc:/etc/pihole
-      - /var/lib/docker/volumes/pihole_data/dnsmasq.d:/etc/dnsmasq.d
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    restart: unless-stopped
+    cap_add:
+        - NET_ADMIN
     dns:
       - 127.0.0.1
       - 1.1.1.1
-    cap_add:
-       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    environment:
+      ServerIP: x.x.x.x
+      DNS1: 1.1.1.1
+      DNS2: 1.0.0.1
+      VIRTUAL_HOST: pi.hole
+      DNSMASQ_LISTENING: all
+    volumes:
+      - /var/lib/docker/volumes/pihole_data/etc:/etc/pihole
+      - /var/lib/docker/volumes/pihole_data/dnsmasq.d:/etc/dnsmasq.d
+    depends_on:
+      - dhcphelper
+    networks:
+      backend:
+        ipv4_address: '172.31.0.100'
+      frontproxy_proxy-tier: {}
+
+  dhcphelper:
+    build: ./dhcp-helper
     restart: unless-stopped
+    network_mode: "host"
+    command: -s 172.31.0.100
+    cap_add:
+      - NET_ADMIN
+
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16
+  frontproxy_proxy-tier:
+    external: true
+
+
