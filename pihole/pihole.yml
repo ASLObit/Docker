@@ -21,20 +21,20 @@ services:
     volumes:
       - /var/lib/docker/volumes/pihole_data/etc:/etc/pihole
       - /var/lib/docker/volumes/pihole_data/dnsmasq.d:/etc/dnsmasq.d
-    depends_on:
-      - dhcphelper
+    # depends_on:
+    #   - dhcphelper
     networks:
       backend:
         ipv4_address: '192.168.20.200'
       frontproxy_proxy-tier: {}
 
-  dhcphelper:
-    build: ./dhcp-helper
-    restart: unless-stopped
-    network_mode: "host"
-    command: -s 192.168.20.200
-    cap_add:
-      - NET_ADMIN
+#  dhcphelper:
+#    build: ./dhcp-helper
+#    restart: unless-stopped
+#    network_mode: "host"
+#    command: -s 192.168.20.200
+#    cap_add:
+#      - NET_ADMIN
 
 networks:
   backend:
