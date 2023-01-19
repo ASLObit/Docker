@@ -1,0 +1,13 @@
+version: '3.7'
+services:
+  grafana:
+    container_name: grafana
+    image: "grafana/grafana:latest"
+    environment:
+      TZ: America/Bogota
+      PGID: 1000
+      UGID: 1000
+    volumes:
+      - /var/lib/docker/volumes/grafana_data/config:/config
+    restart: always
+    network_mode: host
