@@ -9,8 +9,6 @@ services:
       - /var/lib/docker/volumes/prometheus_data/config:/config
       - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
       - /var/lib/docker/volumes/prometheus_data/prometheus:/prometheus
-    # command:
-    #   - "--config.file=/etc/prometheus/prometheus.yml"
     restart: unless-stopped
     networks:
       - prometheus
