@@ -7,7 +7,9 @@ services:
       - 9090:9090
     volumes:
       - /var/lib/docker/volumes/prometheus_data/config:/config
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
     restart: unless-stopped
     networks:
       - prometheus
