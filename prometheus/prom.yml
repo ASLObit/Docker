@@ -1,18 +1,17 @@
-version: "3.7"
-
+version: '3.7'
 services:
   prometheus:
+    image: prom/prometheus
     container_name: prometheus
-    image: prom/prometheus:latest
-    environment:
-      TZ: America/Bogota
-      PGID: 1000
-      UGID: 1000
-    volumes:
-      - /var/lib/docker/volumes/prometheus_data/config:/config
-      - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - 9090:9090
-    restart: always
+    volumes:
+      - /var/lib/docker/volumes/prometheus_data/config:/config
+    restart: unless-stopped
+    networks:
+      - prometheus
+      
+networks:
+  prometheus:
+    driver: bridge
+    name: prometheus
