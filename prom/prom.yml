@@ -11,8 +11,10 @@ services:
       UGID: 1000
       WEBUI_PORT: 8080
     volumes:
-      - /var/lib/docker/volumes/prometheus_data/config:/config
-      - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
+      - /etc/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+      # - /var/lib/docker/volumes/prometheus_data/config:/config
+      # - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
     restart: unless-stopped
     networks:
       - prometheus
