@@ -10,5 +10,5 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - /var/lib/docker/volumes/grafana_data/config:/usr/share/grafana/config
+      - /var/lib/docker/volumes/grafana_data/config:/config
     restart: always
