@@ -10,9 +10,9 @@ services:
       PGID: 1000
       UGID: 1000
       WEBUI_PORT: 8080
-    volumes:
-      - /var/lib/docker/volumes/prometheus_data/config:/config
-      - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
+    #volumes:
+    #  - /var/lib/docker/volumes/prometheus_data/config:/config
+    #  - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: unless-stopped
