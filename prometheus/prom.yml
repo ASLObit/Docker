@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    volumes:
+      - /var/lib/docker/volumes/prometheus_data/config:/config
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    ports:
+      - 9090:9090
+    networks:
+      - grafana
