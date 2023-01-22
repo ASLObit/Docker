@@ -13,7 +13,6 @@ services:
     volumes:
       - /var/lib/docker/volumes/prometheus_data/config:/config
       - /var/lib/docker/volumes/prometheus_data/etc/prometheus:/etc/prometheus
-      - /var/lib/docker/volumes/prometheus_data/prometheus:/prometheus
     restart: unless-stopped
     networks:
       - prometheus
