@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns
+    environment:
+      - PUID=1000 #optional
+      - PGID=1000 #optional
+      - TZ=America/Bogota
+      - SUBDOMAINS=asloha
+      - TOKEN=5a910935-4e67-48f6-b03f-e82b08af4085
+      - LOG_FILE=false #optional
+    volumes:
+      - /var/lib/docker/volumes/duckdns_data/config:/config #optional
+    restart: unless-stopped
