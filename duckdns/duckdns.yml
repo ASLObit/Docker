@@ -7,7 +7,7 @@ services:
       - PUID=1000 #optional
       - PGID=1000 #optional
       - TZ=America/Bogota
-      - SUBDOMAINS=asloha
+      - SUBDOMAINS=aslo
       - TOKEN=5a910935-4e67-48f6-b03f-e82b08af4085
       - LOG_FILE=false #optional
     volumes:
