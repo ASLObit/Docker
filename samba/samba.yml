@@ -21,8 +21,8 @@ services:
       - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel:x
       - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies:w
       - /var/lib/docker/volumes/qbittorrent_data/Series:/Series:v
-      - /var/lib/docker/volumes/samba_data/run:/run/samba
-      - /var/lib/docker/volumes/samba_data/etc:/etc
-      - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
-      - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
-      - /var/lib/docker/volumes/samba_data/log:/var/log/samba
+#       - /var/lib/docker/volumes/samba_data/run:/run/samba
+#       - /var/lib/docker/volumes/samba_data/etc:/etc
+#       - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
+#       - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
+#       - /var/lib/docker/volumes/samba_data/log:/var/log/samba
