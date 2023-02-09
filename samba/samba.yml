@@ -3,17 +3,19 @@ services:
   samba:
     container_name: samba
     image: "dperson/samba:latest"
+    restart: unless-stopped
     environment:
       TZ: America/Bogota
+      PGID: 1000
+      UGID: 1000
     network_mode: host
     ports:
       - 139:139
       - 445:445
-    restart: unless-stopped
     stdin_open: true
     tty: true
     volumes:
-      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies:z
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
       - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries:y
       - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel:x
       - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies:w
