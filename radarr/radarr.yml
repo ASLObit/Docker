@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  sonarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      TZ: America/Bogota
+      PGID: 1000
+      UGID: 1000
+    ports:
+      - 9696:9696
+    volumes:
+      - /var/lib/docker/volumes/radarr_data/config:/config
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
+      - /var/lib/docker/volumes/jdownloader_data/output:/output
+    restart: unless-stopped
