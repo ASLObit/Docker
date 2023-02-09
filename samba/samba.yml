@@ -11,7 +11,7 @@ services:
       TZ: America/Bogota
       PGID: 1000
       UGID: 1000
-    #network_mode: host
+    network_mode: host
     ports:
       - 139:139
       - 445:445
