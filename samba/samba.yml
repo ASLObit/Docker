@@ -2,8 +2,11 @@ version: '3.7'
 services:
   samba:
     container_name: samba
-    image: "dperson/samba:latest"
-    restart: unless-stopped
+    image: "dperson/samba"
+    restart: always
+    command: '-u "aslo;Andres...1990" -s "AnimeMovies;/AnimeMovies;yes;no"'
+    stdin_open: true
+    tty: true
     environment:
       TZ: America/Bogota
       PGID: 1000
@@ -12,8 +15,6 @@ services:
     ports:
       - 139:139
       - 445:445
-    stdin_open: true
-    tty: true
     volumes:
       - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
       - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries:y
@@ -25,4 +26,3 @@ services:
       - /var/lib/docker/volumes/samba_data/cache:/var/cache/samba
       - /var/lib/docker/volumes/samba_data/lib:/var/lib/samba
       - /var/lib/docker/volumes/samba_data/log:/var/log/samba
-    command: '-u "aslo;Andres...1990" -s "AnimeMovies;/AnimeMovies;yes;no"'
