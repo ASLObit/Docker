@@ -10,7 +10,7 @@ services:
     -s "Marvel;/Marvel;yes;no" \
     -s "Movies;/Movies;yes;no" \
     -s "Series;/Series;yes;no" \
-    -s "output;/output;yes;no" \'
+    -s "output;/output;yes;no"'
     stdin_open: true
     tty: true
     environment:
