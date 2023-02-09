@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   sonarr:
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: "lscr.io/linuxserver/prowlarr:latest"
     container_name: prowlarr
     environment:
       TZ: America/Bogota
