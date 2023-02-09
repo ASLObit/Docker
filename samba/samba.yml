@@ -4,13 +4,7 @@ services:
     container_name: samba
     image: "dperson/samba"
     restart: always
-    command: '-u "aslo;Andres...1990" \
-    -s "AnimeMovies;/AnimeMovies;yes;no" \
-    -s "AnimeSeries;/AnimeSeries;yes;no" \
-    -s "Marvel;/Marvel;yes;no" \
-    -s "Movies;/Movies;yes;no" \
-    -s "Series;/Series;yes;no" \
-    -s "output;/output;yes;no"'
+    command: '-u "aslo;Andres...1990" -s "AnimeMovies;/AnimeMovies;yes;no" -s "AnimeSeries;/AnimeSeries;yes;no" -s "Marvel;/Marvel;yes;no" -s "Movies;/Movies;yes;no" -s "Series;/Series;yes;no" -s "output;/output;yes;no"'
     stdin_open: true
     tty: true
     environment:
