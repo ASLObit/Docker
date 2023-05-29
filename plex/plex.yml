@@ -18,6 +18,7 @@ services:
       - /var/lib/docker/volumes/plex_data/transcode:/transcode
       - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
       - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/DC:/DC
       - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
       - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
       - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
