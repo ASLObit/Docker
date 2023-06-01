@@ -2,7 +2,7 @@ version: '3.7'
 services:
   qbittorrent:
     container_name: qbittorrent
-    image: "linuxserver/qbittorrent:latest"
+    image: "cr.hotio.dev/hotio/qbittorrent"
     restart: always
     environment:
       TZ: America/Bogota
