@@ -9,8 +9,7 @@ services:
       PGID: 1000
       UGID: 1000
     expose:
-      - 32400
-      - 33400
+      - 32400:32400
     volumes:
       - /var/lib/docker/volumes/plex_data/config:/config
       - /var/lib/docker/volumes/plex_data/library:/root/Library
