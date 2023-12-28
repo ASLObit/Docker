@@ -24,7 +24,5 @@ services:
     entrypoint: /bin/sh -c
     stdin_open: true
     tty: true
-    extra_hosts:
-      - "github.com:140.82.113.3"  # Agrega esta línea para solucionar el problema de DNS
     command: >
       /bin/sh -c "apk update && apk add curl && curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh && tail -f /dev/null"
