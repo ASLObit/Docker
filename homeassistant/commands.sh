@@ -25,5 +25,9 @@ fi
 curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh
 
 # Subir el archivo a Google Drive
-gdrive upload /config/backups/$(date +\%Y\%m\%d_\%H\%M\%S).tar --parent 1D0RP0i2ZWOc30jKMooqtgg9N2UdEIuR_
-
+if command -v gdrive &> /dev/null; then
+    echo "Subiendo el archivo a Google Drive..."
+    gdrive upload /config/backups/$(date +\%Y\%m\%d_\%H\%M\%S).tar --parent 1D0RP0i2ZWOc30jKMooqtgg9N2UdEIuR_
+else
+    echo "Error: gdrive no está instalado correctamente. No se pudo subir el archivo a Google Drive."
+fi
