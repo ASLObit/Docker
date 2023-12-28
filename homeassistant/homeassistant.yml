@@ -18,6 +18,7 @@ services:
     image: "alpine"
     command: >
       /bin/sh -c "apk update && apk add curl && curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh && tail -f /dev/null"
+      /bin/sh -c "apk update && apk add curl && curl -o /config/backup.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/backup.sh && chmod +x /config/backup.sh && tail -f /dev/null"
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     depends_on:
