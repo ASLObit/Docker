@@ -15,9 +15,9 @@ services:
     network_mode: host
 
   shell_command:
-    image: "ubuntu"  # Puedes usar una imagen basada en Alpine si prefieres algo más ligero
+    image: "alpine"
     command: >
-      /bin/sh -c "curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh"
+      /bin/sh -c "apk --no-cache add curl && curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh"
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     depends_on:
