@@ -25,10 +25,3 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     stdin_open: true
     tty: true
-
-  gdrive:
-    image: alpine:latest
-    volumes:
-      - /var/lib/docker/volumes/homeassistant_data/config:/config
-    command: >
-      apk update && apk add gdrive && /bin/sh -c "tail -f /dev/null"
