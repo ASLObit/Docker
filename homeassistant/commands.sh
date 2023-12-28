@@ -2,7 +2,7 @@
 
 echo "Iniciando el script..."
 
-# Instalar curl y gdrive si no están instalados
+## Instalar curl y gdrive si no están instalados
 if ! command -v curl &> /dev/null; then
     echo "curl no está instalado. Instalando..."
     apk --no-cache add curl
