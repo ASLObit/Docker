@@ -1,4 +1,5 @@
 version: '3.7'
+
 services:
   homeassistant:
     container_name: homeassistant
@@ -15,13 +16,11 @@ services:
 
   shell_command:
     image: "ubuntu"  # Puedes usar una imagen basada en Alpine si prefieres algo más ligero
-    command: "/bin/sh"
+    command: >
+      /bin/sh -c "curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh"
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     depends_on:
       - homeassistant
-    entrypoint: /bin/sh -c
     stdin_open: true
     tty: true
-    command: >
-      /bin/sh -c "curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh"
