@@ -1,7 +1,10 @@
 version: '3.7'
 
-services:
+networks:
+  homeassistant:
+    external: true
 
+services:
   supervisor:
     container_name: homeassistant_supervisor
     image: "homeassistant/amd64-hassio-supervisor"
@@ -9,7 +12,9 @@ services:
       - /var/lib/docker/volumes/homeassistant_data/supervisor:/data
     privileged: true
     restart: unless-stopped
-    
+    networks:
+      - homeassistant
+
   homeassistant:
     container_name: homeassistant
     image: "homeassistant/home-assistant:2024.1.0b4"
@@ -21,9 +26,10 @@ services:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     restart: unless-stopped
     privileged: true
-    network_mode: host
     depends_on:
       - supervisor
+    networks:
+      - homeassistant
 
 # shell_command:
 #   image: "alpine"
