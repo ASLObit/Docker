@@ -3,7 +3,7 @@ version: '3.7'
 services:
   homeassistant:
     container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:stable"
+    image: "homeassistant/home-assistant"
     environment:
       TZ: America/Bogota
       PGID: 1000
