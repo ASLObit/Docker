@@ -1,19 +1,6 @@
 version: '3.7'
 
-networks:
-  homeassistant:
-    external: true
-
 services:
-  supervisor:
-    container_name: homeassistant_supervisor
-    image: "homeassistant/amd64-hassio-supervisor"
-    volumes:
-      - /var/lib/docker/volumes/homeassistant_data/supervisor:/data
-    privileged: true
-    restart: unless-stopped
-    networks:
-      - homeassistant
 
   homeassistant:
     container_name: homeassistant
@@ -26,27 +13,23 @@ services:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     restart: unless-stopped
     privileged: true
-    depends_on:
-      - supervisor
-    networks:
-      - homeassistant
 
-  shell_command:
-    image: "alpine"
-    command: >
-      /bin/sh -c "apk update && apk add curl && curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh && tail -f /dev/null"
-      /bin/sh -c "apk update && apk add curl && curl -o /config/backup.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/backup.sh && chmod +x /config/backup.sh && tail -f /dev/null"
-    volumes:
-      - /var/lib/docker/volumes/homeassistant_data/config:/config
-    depends_on:
-      - homeassistant
-    entrypoint: ["/bin/sh", "-c"]
-    stdin_open: true
-    tty: true
+#  shell_command:
+#    image: "alpine"
+#    command: >
+#      /bin/sh -c "apk update && apk add curl && curl -o /config/commands.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/commands.sh && chmod +x /config/commands.sh && tail -f /dev/null"
+#      /bin/sh -c "apk update && apk add curl && curl -o /config/backup.sh https://raw.githubusercontent.com/ASLObit/Docker/main/homeassistant/backup.sh && chmod +x /config/backup.sh && tail -f /dev/null"
+#    volumes:
+#      - /var/lib/docker/volumes/homeassistant_data/config:/config
+#    depends_on:
+#      - homeassistant
+#    entrypoint: ["/bin/sh", "-c"]
+#    stdin_open: true
+#    tty: true
 
-  gdrive:
-    image: alpine:latest
-    volumes:
-      - /var/lib/docker/volumes/homeassistant_data/config:/config
-    command: >
-      apk update && apk add gdrive && /bin/sh -c "tail -f /dev/null"
+#  gdrive:
+#    image: alpine:latest
+#    volumes:
+#      - /var/lib/docker/volumes/homeassistant_data/config:/config
+#    command: >
+#      apk update && apk add gdrive && /bin/sh -c "tail -f /dev/null"
