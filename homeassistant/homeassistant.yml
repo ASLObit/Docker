@@ -3,7 +3,7 @@ version: '3.7'
 services:
   homeassistant:
     container_name: homeassistant
-    image: "homeassistant/home-assistant"
+    image: "homeassistant/home-assistant:2024.1.0b4"
     environment:
       TZ: America/Bogota
       PGID: 1000
