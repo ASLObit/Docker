@@ -1,10 +1,8 @@
 version: '3.7'
-
 services:
-
   homeassistant:
     container_name: homeassistant
-    image: "homeassistant/home-assistant:2024.1.0b4"
+    image: "ghcr.io/home-assistant/home-assistant:stable"
     environment:
       TZ: America/Bogota
       PGID: 1000
@@ -13,6 +11,7 @@ services:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
     restart: unless-stopped
     privileged: true
+    network_mode: host
 
 #  shell_command:
 #    image: "alpine"
