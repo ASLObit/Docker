@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   backup:
+    container_name: homeassistant_backup
     image: ghcr.io/home-assistant/backup
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
