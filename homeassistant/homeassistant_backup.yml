@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  backup:
+    image: ghcr.io/home-assistant/backup
+    volumes:
+      - /var/lib/docker/volumes/homeassistant_data/config:/config
+      - /tmp:/tmp
+    restart: always
+    networks:
+      - default
+
+networks:
+  default:
