@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  supervisor:
+    image: ghcr.io/home-assistant/home-assistant-supervisor:stable
+    volumes:
+      - /var/lib/docker/volumes/homeassistant_data/config:/config
+      - /tmp:/tmp
+    restart: always
+    networks:
+      - default
+
+networks:
+  default:
