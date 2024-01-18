@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   supervisor:
-    image: lansible/home-assistant:latest
+    image: pschmitt/home-assistant-addon-i386-flicd:latest
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
       - /tmp:/tmp
