@@ -5,9 +5,6 @@ services:
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
       - /tmp:/tmp
-    restart: always
-    networks:
-      - default
-
-networks:
-  default:
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
