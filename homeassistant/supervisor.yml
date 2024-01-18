@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   supervisor:
-    image: ghcr.io/home-assistant/home-assistant-supervisor:stable
+    image: lansible/home-assistant:latest
     volumes:
       - /var/lib/docker/volumes/homeassistant_data/config:/config
       - /tmp:/tmp
