@@ -1,0 +1,10 @@
+services:
+    app:
+        image: fazalfarhan01/earnapp
+        privileged: true
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup:ro
+            - ./etc:/etc/earnapp
+        secrets:
+            - username_secret
+            - password_secret
