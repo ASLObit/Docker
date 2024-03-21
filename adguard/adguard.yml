@@ -12,6 +12,7 @@ services:
       - "68:68/tcp"
       - "68:68/udp"
       - "443:443/tcp"
+    network_mode: host
 
     volumes:
         - /var/lib/docker/volumes/adguard_data/conf:/conf
