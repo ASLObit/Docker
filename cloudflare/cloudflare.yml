@@ -3,6 +3,7 @@ version: '3'
 services:
   cloudflared:
     image: cloudflare/cloudflared:latest
+    container_name: cloudflare
     command: tunnel --no-autoupdate run --token eyJhIjoiMTE5ZWE4NTY4YjZhYjYyNjRmYmZmMWQzYjBlYmFlZGMiLCJ0IjoiNDY2NjJkNDktMjVhOC00NjdmLWE4OTAtY2YzNzZlNDlhYjNhIiwicyI6Ik1qY3dZemM1TkRBdE1UQmpNeTAwTVRZd0xXRmhNVGd0TmprMVkyVTFOMkUxTnpRMCJ9
     volumes:
       - /etc/cloudflared:/etc/cloudflared
