@@ -7,9 +7,4 @@ services:
     volumes:
       - /etc/cloudflared:/etc/cloudflared
     restart: always
-    networks:
-      - default
-
-networks:
-  default:
-    external: true
+    network_mode: host
