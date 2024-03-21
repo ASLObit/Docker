@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  adguard:
+    container_name: adguard
+    image: adguard/adguardhome
+    restart: always
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "68:68/tcp"
+      - "68:68/udp"
+      - "443:443/tcp"
+
+    volumes:
+        - /var/lib/docker/volumes/adguard_data/conf:/conf
+        - /var/lib/docker/volumes/adguard_data/work:/work
+        - /var/lib/docker/volumes/adguard_data/logs:/logs
