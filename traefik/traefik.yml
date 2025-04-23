@@ -10,8 +10,8 @@ services:
       - "8081:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.toml:/etc/traefik/traefik.toml
-      - ./letsencrypt:/letsencrypt
+      - /Docker/traefik/letsencrypt:/letsencrypt
+    entrypoint: /bin/sh -c "curl -o /etc/traefik/traefik.toml https://raw.githubusercontent.com/ASLObit/Docker/refs/heads/main/traefik/traefik.toml && traefik"
     networks:
       - web
     labels:
