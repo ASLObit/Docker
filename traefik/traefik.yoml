@@ -1,9 +1,7 @@
-# Configuración global
 [global]
   checkNewVersion = true
   sendAnonymousUsage = false
 
-# Configuración de entrada (puertos)
 [entryPoints]
   [entryPoints.web]
     address = ":80"
@@ -16,18 +14,15 @@
   [entryPoints.websecure]
     address = ":443"
 
-# Configuración del dashboard (opcional)
 [api]
   dashboard = true
   insecure = false
 
-# Proveedores (Docker en este caso)
 [providers]
   [providers.docker]
     endpoint = "unix:///var/run/docker.sock"
-    exposedByDefault = false # Solo los contenedores con `traefik.enable=true` serán detectados
+    exposedByDefault = false
 
-# Configuración de Let’s Encrypt para SSL
 [certificatesResolvers.letsencrypt.acme]
   email = "tu-email@example.com" # Cambia a tu correo
   storage = "/letsencrypt/acme.json"
