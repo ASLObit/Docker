@@ -1,17 +1,17 @@
-version: "3.8"
+version: '3.7'
 
 services:
   traefik:
-    image: traefik:v2.10 # Usa una versión reciente de Traefik
+    image: traefik:v2.10
     container_name: traefik
     ports:
-      - "80:80" # HTTP
-      - "443:443" # HTTPS
+      - "80:80"    # HTTP
+      - "443:443"  # HTTPS
       - "8080:8080" # Dashboard (opcional)
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Para que Traefik detecte otros contenedores
-      - ./traefik.toml:/etc/traefik/traefik.toml # Archivo de configuración (crearemos este archivo)
-      - ./letsencrypt:/letsencrypt # Para almacenar certificados de Let’s Encrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./letsencrypt:/letsencrypt
     networks:
       - web
     labels:
@@ -21,27 +21,6 @@ services:
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
 
-  # Tus servicios existentes (ejemplo)
-  app:
-    image: tu-imagen-de-app
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`app.tudominio.local`)" # Cambia a tu dominio
-      - "traefik.http.routers.app.tls=true"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
-    networks:
-      - web
-
-  grafana:
-    image: grafana/grafana
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`grafana.tudominio.local`)" # Cambia a tu dominio
-      - "traefik.http.routers.grafana.tls=true"
-      - "traefik.http.routers.grafana.tls.certresolver=letsencrypt"
-    networks:
-      - web
-
 networks:
   web:
-    external: true # Crea esta red antes con `docker network create web`
+    external: true
