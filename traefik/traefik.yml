@@ -5,9 +5,9 @@ services:
     image: traefik:v2.10
     container_name: traefik
     ports:
-      - "80:80"    # HTTP
-      - "443:443"  # HTTPS
-      - "8081:8081" # Dashboard (opcional)
+      - "80:80"
+      - "443:443"
+      - "8081:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik.toml:/etc/traefik/traefik.toml
@@ -16,7 +16,7 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.tudominio.local`)" # Cambia a tu dominio
+      - "traefik.http.routers.traefik.rule=Host(`traefik.tudominio.local`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
