@@ -21,10 +21,11 @@ services:
       - /var/lib/docker/volumes/qbittorrent_data/_data/Series:/Series
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.plex.rule=Host(`plex.tudominio.local`)" # Cambia a tu dominio
-      - "traefik.http.routers.plex.tls=true"
-      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400" # Puerto interno de Plex
+      - "traefik.http.routers.plex.rule=Host(`plex.tudominio.local`)"
+      - "traefik.http.services.plex.loadbalancer.server.port=32400"
+      # Desactivamos TLS:
+      # - "traefik.http.routers.plex.tls=true"
+      # - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
     networks:
       - web
 
