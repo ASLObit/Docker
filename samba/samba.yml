@@ -11,10 +11,9 @@ services:
       TZ: America/Bogota
       PGID: 1000
       UGID: 1000
-    network_mode: host
     ports:
-      - 139:139
-      - 445:445
+      - "139:139"
+      - "445:445"
     volumes:
       - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
       - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
