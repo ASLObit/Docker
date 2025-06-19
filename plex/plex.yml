@@ -1,34 +1,25 @@
 version: '3.7'
-
 services:
-  plex:
+  qbittorrent:
     container_name: plex
     image: "jaymoulin/plex:latest"
     restart: unless-stopped
     environment:
       TZ: America/Bogota
-      PUID: 1000
       PGID: 1000
-    volumes:
-      - /var/lib/docker/volumes/plex_data/_data/config:/config
-      - /var/lib/docker/volumes/plex_data/_data/library:/root/library
-      - /var/lib/docker/volumes/plex_data/_data/media:/media
-      - /var/lib/docker/volumes/plex_data/_data/transcode:/transcode
-      - /var/lib/docker/volumes/qbittorrent_data/_data/AnimeMovies:/AnimeMovies
-      - /var/lib/docker/volumes/qbittorrent_data/_data/DC:/DC
-      - /var/lib/docker/volumes/qbittorrent_data/_data/Marvel:/Marvel
-      - /var/lib/docker/volumes/qbittorrent_data/_data/Movies:/Movies
-      - /var/lib/docker/volumes/qbittorrent_data/_data/Series:/Series
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.plex.rule=Host(`plex.tudominio.local`)"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400"
-      # Desactivamos TLS:
-      # - "traefik.http.routers.plex.tls=true"
-      # - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
-    networks:
-      - web
+      UGID: 1000
+    expose:
+      - 32400:32400
 
-networks:
-  web:
-    external: true
+    volumes:
+      - /var/lib/docker/volumes/plex_data/config:/config
+      - /var/lib/docker/volumes/plex_data/library:/root/Library
+      - /var/lib/docker/volumes/plex_data/media:/media
+      - /var/lib/docker/volumes/plex_data/transcode:/transcode
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeMovies:/AnimeMovies
+      - /var/lib/docker/volumes/qbittorrent_data/AnimeSeries:/AnimeSeries
+      - /var/lib/docker/volumes/qbittorrent_data/DC:/DC
+      - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
+      - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
+      - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
+    network_mode: host
