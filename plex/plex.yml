@@ -22,4 +22,5 @@ services:
       - /var/lib/docker/volumes/qbittorrent_data/Marvel:/Marvel
       - /var/lib/docker/volumes/qbittorrent_data/Movies:/Movies
       - /var/lib/docker/volumes/qbittorrent_data/Series:/Series
+      - /var/lib/docker/volumes/qbittorrent_data/Exercises:/Exercises
     network_mode: host
