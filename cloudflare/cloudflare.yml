@@ -4,7 +4,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflare
-    command: tunnel --no-autoupdate run --token eyJhIjoiMTE5ZWE4NTY4YjZhYjYyNjRmYmZmMWQzYjBlYmFlZGMiLCJ0IjoiMjAyMDJkYTUtYzlkNi00MWMyLWFlMTUtYzkwMjQxNDRhODQ3IiwicyI6Ik5ERXlNV0prTW1JdE16RmxNaTAwWm1ReUxXSTVaREl0TmpoaE5EUTRaVEJrT0daaiJ9
+    command: tunnel --no-autoupdate run --token eyJhIjoiMTE5ZWE4NTY4YjZhYjYyNjRmYmZmMWQzYjBlYmFlZGMiLCJ0IjoiMjAyMDJkYTUtYzlkNi00MWMyLWFlMTUtYzkwMjQxNDRhODQ3IiwicyI6Ik1qSm1aR0k1WmprdE9HVXhNQzAwTVRjMExUaGxOV010WmpjMk5tUmpNelUyTlRFeiJ9
     volumes:
       - /etc/cloudflared:/etc/cloudflared
     restart: always
