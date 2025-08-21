@@ -11,6 +11,4 @@ services:
       - HA_URL=https://hassio.asloos.uk/
       - HA_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZmIzMjQzYWFjMjk0NzFjOWFmZTE0MDNiNTYxMWViMCIsImlhdCI6MTc0MDU5NTI4OSwiZXhwIjoyMDU1OTU1Mjg5fQ.zePJMG2rJQpF3n8_6N58Fw6aFmYEj9is_h4r4ouuIDo
       - TZ=America/Bogota
-    volumes:
-      - ./app:/app
     restart: unless-stopped
