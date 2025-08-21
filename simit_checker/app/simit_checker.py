@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import schedule
 
 PLACA = os.getenv("PLACA", "LKQ163")
 HA_URL = os.getenv("HA_URL")
