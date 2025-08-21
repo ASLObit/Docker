@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# Iniciar el servicio cron en foreground
-cron -f
+# Ejecutar el script Python directamente
+python3 /app/simit_checker.py
