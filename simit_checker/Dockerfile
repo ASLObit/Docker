@@ -2,9 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY app/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-COPY app/ .
+COPY . .
 
-ENTRYPOINT ["python3", "/app/simit_checker.py"]
+CMD ["python3", "simit_checker.py"]
