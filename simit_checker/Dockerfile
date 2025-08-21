@@ -2,14 +2,9 @@ FROM selenium/standalone-chrome:latest
 
 USER root
 
-# Instalar Python, pip y cron
-RUN apt-get update -y && apt-get install -y python3 python3-pip cron && \
+# Instalar Python y pip
+RUN apt-get update -y && apt-get install -y python3 python3-pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Crear directorio para tareas cron y PID, asignar permisos
-RUN mkdir -p /etc/cron.d /var/run && \
-    chmod 755 /etc/cron.d /var/run && \
-    chown seluser:seluser /var/run
 
 WORKDIR /app
 
@@ -23,13 +18,6 @@ COPY app/ .
 # Copiar y configurar entrypoint
 COPY app/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-# Copiar archivo de cron
-COPY app/simit-cron /etc/cron.d/simit-cron
-RUN chmod 644 /etc/cron.d/simit-cron
-
-# Asegurar que los logs de cron sean accesibles
-RUN touch /var/log/cron.log && chmod 644 /var/log/cron.log && chown seluser:seluser /var/log/cron.log
 
 # Cambiar al usuario selenium
 USER seluser
