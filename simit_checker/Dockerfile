@@ -21,14 +21,14 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
 WORKDIR /app
 
 # Dependencias Python
-COPY requirements.txt .
+COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar app
-COPY . .
+COPY app/ .
 
 # Copiar cronjob
-COPY entrypoint.sh /entrypoint.sh
+COPY app/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
