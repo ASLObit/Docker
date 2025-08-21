@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  simit_checker:
+  web-scraper:
     build:
       context: .
     container_name: simit_checker
@@ -12,4 +12,19 @@ services:
       - TZ=America/Bogota
     volumes:
       - ./app:/app
-    restart: unless-stopped
+    depends_on:
+      - selenium
+    networks:
+      - app-network
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-chrome
+    ports:
+      - "4444:4444"
+    networks:
+      - app-network
+    
+networks:
+  app-network:
+    driver: bridge
