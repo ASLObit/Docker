@@ -17,7 +17,8 @@ def check_simit(placa):
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-    driver = webdriver.Chrome(options=options)
+    from selenium.webdriver.chrome.service import Service
+    driver = webdriver.Chrome(service=Service('/usr/bin/chromedriver'), options=options)
     driver.get("https://www.simit.org.co/")
 
     time.sleep(5)
