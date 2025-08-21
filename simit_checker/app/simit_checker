@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-PLACA = os.getenv("PLACA", "AAJ45C")
+PLACA = os.getenv("PLACA", "LKQ163")
 HA_URL = os.getenv("HA_URL")
 HA_TOKEN = os.getenv("HA_TOKEN")
 
