@@ -1,1 +1,0 @@
-0 9 * * * root python3 /app/simit_checker.py >> /var/log/cron.log 2>&1
