@@ -1,30 +1,17 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  web-scraper:
-    build:
-      context: .
-    container_name: simit_checker
-    environment:
-      - PLACA=LKQ163
-      - HA_URL=https://hassio.asloos.uk/
-      - HA_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZmIzMjQzYWFjMjk0NzFjOWFmZTE0MDNiNTYxMWViMCIsImlhdCI6MTc0MDU5NTI4OSwiZXhwIjoyMDU1OTU1Mjg5fQ.zePJMG2rJQpF3n8_6N58Fw6aFmYEj9is_h4r4ouuIDo
-      - TZ=America/Bogota
+  simit-checker:
+    # Construye la imagen usando el Dockerfile en el directorio actual.
+    build: .
+
+    # Define la ruta del directorio de trabajo y el comando a ejecutar.
+    # El comando sobrescribe la instrucción CMD en el Dockerfile para
+    # pasar la placa del vehículo como argumento.
+    command: ["python3", "/app/simit_checker.py", "LKQ163"]
+
+    # Sincroniza el directorio local 'app' con el directorio '/app' del contenedor.
+    # Esto es crucial para que cualquier cambio en tu código Python se refleje
+    # automáticamente en el contenedor sin necesidad de reconstruir la imagen.
     volumes:
       - ./app:/app
-    depends_on:
-      - selenium
-    networks:
-      - app-network
-
-  selenium:
-    image: selenium/standalone-chrome:latest
-    container_name: selenium-chrome
-    ports:
-      - "4444:4444"
-    networks:
-      - app-network
-    
-networks:
-  app-network:
-    driver: bridge
