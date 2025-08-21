@@ -12,11 +12,12 @@ WORKDIR /app
 COPY app/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copiar aplicación (incluyendo simit_checker.py)
+# Copiar toda la aplicación, incluyendo simit_checker.py
 COPY app/ .
 
 # Copiar y configurar entrypoint
 COPY app/entrypoint.sh /entrypoint.sh
+COPY app/simit_checker.py .
 RUN chmod +x /entrypoint.sh
 
 # Cambiar al usuario selenium
