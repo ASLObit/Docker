@@ -44,7 +44,6 @@ def job():
     status = check_simit(PLACA)
     send_to_homeassistant(f"Placa {PLACA}: {status}")
 
-# Programar la tarea a las 9 AM
 if __name__ == "__main__":
     schedule.every().day.at("09:00").do(job)
     print("Iniciando scheduler. Esperando hasta las 9:00 AM...")
