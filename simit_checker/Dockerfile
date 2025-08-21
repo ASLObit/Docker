@@ -1,25 +1,10 @@
-FROM selenium/standalone-chrome:latest
+FROM python:3.12-slim
 
-USER root
-
-# Instalar Python y pip
-RUN apt-get update -y && \
-    apt-get install -y python3 python3-pip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo de dependencias
 COPY app/requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el script de Python
-COPY app/simit_checker.py .
+COPY app/ .
 
-# Cambiar al usuario seluser para mejorar la seguridad
-USER seluser
-
-# Definir el punto de entrada que ejecuta el script directamente
 ENTRYPOINT ["python3", "/app/simit_checker.py"]

@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  simit_checker:
+  web-scraper:
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,4 +11,24 @@ services:
       - HA_URL=https://hassio.asloos.uk/
       - HA_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxZmIzMjQzYWFjMjk0NzFjOWFmZTE0MDNiNTYxMWViMCIsImlhdCI6MTc0MDU5NTI4OSwiZXhwIjoyMDU1OTU1Mjg5fQ.zePJMG2rJQpF3n8_6N58Fw6aFmYEj9is_h4r4ouuIDo
       - TZ=America/Bogota
-    restart: unless-stopped
+      - SE_EVENT_BUS_HOST=selenium
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+    volumes:
+      - ./app:/app
+    depends_on:
+      - selenium
+    networks:
+      - app-network
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-chrome
+    ports:
+      - "4444:4444"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
