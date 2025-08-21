@@ -11,12 +11,12 @@ RUN apt-get update -y && \
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo de dependencias y ejecutar la instalación
+# Copiar el archivo de dependencias
 COPY app/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Cambiar al usuario seluser para mejorar la seguridad
 USER seluser
 
-# Definir el punto de entrada del contenedor
+# Definir el punto de entrada que ejecuta el script directamente
 ENTRYPOINT ["python3", "/app/simit_checker.py"]
