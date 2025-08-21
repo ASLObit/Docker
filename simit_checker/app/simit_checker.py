@@ -4,10 +4,9 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 PLACA = os.getenv("PLACA", "LKQ163")
 HA_URL = os.getenv("HA_URL")
@@ -19,16 +18,14 @@ def check_simit(placa):
     options.add_argument("--headless")
     options.add_argument("--disable-dev-shm-usage")
 
-    # Conectarse al servidor de Selenium en el contenedor
-    driver = RemoteWebDriver(
-        command_executor='http://localhost:4444/wd/hub',
-        options=options
-    )
+    # Conectar a la instancia local de Chrome
+    service = Service('/usr/bin/chromedriver') # Ruta al ChromeDriver dentro del contenedor
+    driver = webdriver.Chrome(service=service, options=options)
+    
     driver.get("https://www.simit.org.co/")
 
-    # Usar esperas explícitas para una ejecución más robusta
     try:
-        wait = WebDriverWait(driver, 20)  # Espera hasta 20 segundos
+        wait = WebDriverWait(driver, 20)
         element = wait.until(EC.presence_of_element_located((By.ID, "placa")))
         element.send_keys(placa)
         
@@ -40,10 +37,8 @@ def check_simit(placa):
         driver.quit()
         return "ERROR_EN_SCRAPING"
 
-    # Esperar a que la página cargue los resultados
     time.sleep(10)
 
-    # Verificar si aparece el texto de comparendos
     result = "NO TIENE COMPARENDOS"
     if "comparendo" in driver.page_source.lower():
         result = "TIENE COMPARENDOS"
@@ -52,10 +47,11 @@ def check_simit(placa):
     return result
 
 def send_to_homeassistant(message):
-    url = f"{HA_URL}/api/services/persistent_notification/create"
-    headers = {"Authorization": f"Bearer {HA_TOKEN}", "Content-Type": "application/json"}
-    payload = {"title": "Reporte SIMIT", "message": message}
-    requests.post(url, headers=headers, json=payload)
+    if HA_URL and HA_TOKEN:
+        url = f"{HA_URL}/api/services/persistent_notification/create"
+        headers = {"Authorization": f"Bearer {HA_TOKEN}", "Content-Type": "application/json"}
+        payload = {"title": "Reporte SIMIT", "message": message}
+        requests.post(url, headers=headers, json=payload)
 
 def job():
     print(f"Ejecutando tarea a las {time.strftime('%H:%M:%S')}")
