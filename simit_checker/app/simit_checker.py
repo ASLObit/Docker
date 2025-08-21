@@ -44,11 +44,10 @@ def job():
     status = check_simit(PLACA)
     send_to_homeassistant(f"Placa {PLACA}: {status}")
 
-# Programar la tarea a las 9 AM (hora local, ajustada por TZ=America/Bogota)
-schedule.every().day.at("09:00").do(job)
-
-# Bucle principal
-print("Iniciando scheduler. Esperando hasta las 9:00 AM...")
-while True:
-    schedule.run_pending()
-    time.sleep(60)  # Revisar cada minuto
+# Programar la tarea a las 9 AM
+if __name__ == "__main__":
+    schedule.every().day.at("09:00").do(job)
+    print("Iniciando scheduler. Esperando hasta las 9:00 AM...")
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
