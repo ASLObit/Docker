@@ -4,7 +4,8 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-import schedule
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 PLACA = os.getenv("PLACA", "LKQ163")
 HA_URL = os.getenv("HA_URL")
@@ -17,15 +18,28 @@ def check_simit(placa):
     options.add_argument("--disable-dev-shm-usage")
 
     driver = webdriver.Chrome(options=options)
-    driver.get("https://www.fcm.org.co/simit/#/home-public")
+    driver.get("https://www.simit.org.co/")
 
-    # Simular scraping (ajusta según el sitio real)
     time.sleep(5)
-    driver.find_element(By.ID, "placa").send_keys(placa)
-    driver.find_element(By.ID, "buscar").click()
+    try:
+        wait = WebDriverWait(driver, 20)
+        element = wait.until(EC.presence_of_element_located((By.ID, "placa")))
+        element.send_keys(placa)
+    except Exception as e:
+        print(f"Error esperando o encontrando el elemento: {e}")
+        driver.quit()
+        return "ERROR_EN_SCRAPING"
+    
+    try:
+        button = wait.until(EC.element_to_be_clickable((By.ID, "buscar")))
+        button.click()
+    except Exception as e:
+        print(f"Error esperando o haciendo clic en el botón: {e}")
+        driver.quit()
+        return "ERROR_EN_SCRAPING"
+
     time.sleep(10)
 
-    # Ejemplo: verificar si aparece texto de comparendos
     result = "NO TIENE COMPARENDOS"
     if "comparendo" in driver.page_source.lower():
         result = "TIENE COMPARENDOS"
@@ -37,7 +51,11 @@ def send_to_homeassistant(message):
     url = f"{HA_URL}/api/services/persistent_notification/create"
     headers = {"Authorization": f"Bearer {HA_TOKEN}", "Content-Type": "application/json"}
     payload = {"title": "Reporte SIMIT", "message": message}
-    requests.post(url, headers=headers, json=payload)
+    try:
+        requests.post(url, headers=headers, json=payload)
+        print("Notificación enviada a Home Assistant.")
+    except Exception as e:
+        print(f"Error enviando notificación a Home Assistant: {e}")
 
 def job():
     print(f"Ejecutando tarea a las {time.strftime('%H:%M:%S')}")
@@ -45,8 +63,4 @@ def job():
     send_to_homeassistant(f"Placa {PLACA}: {status}")
 
 if __name__ == "__main__":
-    schedule.every().day.at("09:00").do(job)
-    print("Iniciando scheduler. Esperando hasta las 9:00 AM...")
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+    job()   # Se ejecuta de inmediato
