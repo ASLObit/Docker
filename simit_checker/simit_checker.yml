@@ -13,4 +13,5 @@ services:
       - TZ=America/Bogota
     volumes:
       - ./app:/app
-    #restart: always
+      - ./app/simit_checker.py:/app/simit_checker.py
+    restart: unless-stopped  # Cambia a esto para reinicio condicional
