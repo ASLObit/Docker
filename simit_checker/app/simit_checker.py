@@ -17,27 +17,12 @@ def check_simit(placa):
     options.add_argument("--disable-dev-shm-usage")
 
     driver = webdriver.Chrome(options=options)
-    driver.get("https://www.simit.org.co/")
+    driver.get("https://www.fcm.org.co/simit/#/home-public")
 
     # Simular scraping (ajusta según el sitio real)
     time.sleep(5)
-    try:
-        wait = WebDriverWait(driver, 20)  # Espera hasta 20 segundos
-        element = wait.until(EC.presence_of_element_located((By.ID, "placa")))
-        element.send_keys(placa)
-    except Exception as e:
-        print(f"Error esperando o encontrando el elemento: {e}")
-        driver.quit()
-        return "ERROR_EN_SCRAPING"
-    
-    try:
-        button = wait.until(EC.element_to_be_clickable((By.ID, "buscar")))
-        button.click()
-    except Exception as e:
-        print(f"Error esperando o haciendo clic en el botón: {e}")
-        driver.quit()
-        return "ERROR_EN_SCRAPING"
-
+    driver.find_element(By.ID, "placa").send_keys(placa)
+    driver.find_element(By.ID, "buscar").click()
     time.sleep(10)
 
     # Ejemplo: verificar si aparece texto de comparendos
