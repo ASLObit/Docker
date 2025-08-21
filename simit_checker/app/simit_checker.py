@@ -14,9 +14,8 @@ HA_TOKEN = os.getenv("HA_TOKEN")
 
 def check_simit(placa):
     options = Options()
-    # Las opciones --headless y --no-sandbox se manejan por el servidor de Selenium
     
-    # Conectarse al servidor de Selenium
+    # Conectarse al servidor de Selenium a través de la red de Docker
     driver = RemoteWebDriver(
         command_executor='http://selenium:4444/wd/hub',
         options=options
@@ -25,7 +24,7 @@ def check_simit(placa):
     driver.get("https://www.simit.org.co/")
 
     try:
-        wait = WebDriverWait(driver, 30) # Aumentar el tiempo de espera
+        wait = WebDriverWait(driver, 30)
         element = wait.until(EC.presence_of_element_located((By.ID, "placa")))
         element.send_keys(placa)
         

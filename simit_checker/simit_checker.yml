@@ -4,7 +4,6 @@ services:
   web-scraper:
     build:
       context: .
-      dockerfile: Dockerfile
     container_name: simit_checker
     environment:
       - PLACA=LKQ163
