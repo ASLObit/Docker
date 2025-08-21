@@ -3,23 +3,20 @@ FROM selenium/standalone-chrome:latest
 USER root
 
 # Instalar Python y pip
-RUN apt-get update -y && apt-get install -y python3 python3-pip && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && \
+    apt-get install -y python3 python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar dependencias Python
+# Copiar el archivo de dependencias y ejecutar la instalación
 COPY app/requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copiar toda la aplicación, incluyendo simit_checker.py
-COPY app/ .
-
-# Copiar y configurar entrypoint
-RUN chmod +x /app/entrypoint.sh
-
-# Cambiar al usuario selenium
+# Cambiar al usuario seluser para mejorar la seguridad
 USER seluser
 
-# Corregir la ruta del punto de entrada
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Definir el punto de entrada del contenedor
+ENTRYPOINT ["python3", "/app/simit_checker.py"]
