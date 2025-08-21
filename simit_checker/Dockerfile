@@ -21,4 +21,5 @@ RUN chmod +x /app/entrypoint.sh
 # Cambiar al usuario selenium
 USER seluser
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Corregir la ruta del punto de entrada
+ENTRYPOINT ["/app/entrypoint.sh"]
