@@ -13,4 +13,4 @@ services:
       - TZ=America/Bogota
     volumes:
       - ./app:/app
-    restart: always
+    #restart: always
