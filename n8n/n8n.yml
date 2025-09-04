@@ -3,7 +3,7 @@ version: "3.9"
 services:
   n8n:
     container_name: n8n
-    image: n8nio/n8n
+    build: .
     restart: unless-stopped
     ports:
       - "5678:5678"
@@ -17,4 +17,3 @@ services:
     user: "1000:1000"
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
-
