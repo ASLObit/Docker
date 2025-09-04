@@ -13,6 +13,7 @@ services:
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=Colombia2025*
       - GENERIC_TIMEZONE=America/Bogota
+      - N8N_SECURE_COOKIE=false
     user: "1000:1000"
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
