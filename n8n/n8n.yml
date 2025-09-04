@@ -1,15 +1,19 @@
-version: "3"
+version: "3.9"
 
 services:
   n8n:
+    container_name: n8n
     image: n8nio/n8n
-    restart: always
+    restart: unless-stopped
     ports:
       - "5678:5678"
     environment:
+      - TZ=America/Bogota
       - N8N_BASIC_AUTH_ACTIVE=true
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=Colombia2025*
-      - TZ=America/Bogota
+      - GENERIC_TIMEZONE=America/Bogota
+    user: "1000:1000"
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
+
