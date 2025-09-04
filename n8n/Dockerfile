@@ -1,8 +1,9 @@
 FROM n8nio/n8n:latest
 
-# Instalar ffmpeg
+# Instalar ffmpeg en Alpine
 USER root
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ffmpeg
 
-# Volvemos al usuario normal de n8n
+# Volver al usuario por defecto de n8n
 USER node
+
