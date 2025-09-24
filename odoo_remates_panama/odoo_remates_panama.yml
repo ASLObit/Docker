@@ -13,12 +13,11 @@ services:
       - PASSWORD=odoo
     volumes:
       - remates-panama-web-data:/var/lib/odoo
-      - ./remates-panama-config/odoo.conf:/etc/odoo/odoo.conf
+      - ./remates-panama-config:/etc/odoo
       - ./remates-panama-addons:/mnt/extra-addons
     container_name: remates-panama-web
     command: >
       --init=website,website_sale,sale,stock,account
-      --no-http
 
   db:
     image: postgres:13
