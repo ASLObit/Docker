@@ -17,7 +17,7 @@ services:
       - ./remates-panama-addons:/mnt/extra-addons
     container_name: remates-panama-web
     command: >
-      --init=website,website_sale,sale,stock,account
+      --init=sale,stock,account
 
   db:
     image: postgres:13
