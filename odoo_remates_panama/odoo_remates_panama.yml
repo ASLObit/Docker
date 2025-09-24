@@ -6,7 +6,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8070:8069"
+      - "8071:8069"
     environment:
       - HOST=db
       - USER=odoo
@@ -16,6 +16,10 @@ services:
       - ./remates-panama-config:/etc/odoo
       - ./remates-panama-addons:/mnt/extra-addons
     container_name: remates-panama-web
+    command: >
+      -- -c /etc/odoo/odoo.conf
+      --init=website,website_sale,sale,stock,account
+      --no-http
 
   db:
     image: postgres:13
