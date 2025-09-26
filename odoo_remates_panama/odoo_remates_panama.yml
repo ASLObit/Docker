@@ -12,10 +12,10 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      - remates-panama-web-data:/var/lib/odoo
+      #- remates-panama-web-data:/var/lib/odoo
       - /var/lib/docker/volumes/odoo_remates_panama_remates-panama-web-data/remates-panama-config:/etc/odoo
       - /var/lib/docker/volumes/odoo_remates_panama_remates-panama-web-data/remates-panama-addons:/mnt/extra-addons
-
+      
     container_name: remates-panama-web
     command: >
       --init=sale,stock,account
