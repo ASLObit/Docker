@@ -3,21 +3,30 @@ version: '3.1'
 services:
   web:
     image: odoo:18.0
-    container_name: remates-panama-web
+    depends_on:
+      - db
     ports:
       - "8070:8069"
     environment:
-      - HOST=remates-panama-db   # el nombre de tu contenedor db ya existente
+      - HOST=db
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      # - remates-panama-web-data:/var/lib/odoo   # ⚠️ esto estaba vacío, lo comento
-      - /var/lib/docker/volumes/odoo_remates_panama_remates-panama-web-data/remates-panama-config:/etc/odoo
-      - /var/lib/docker/volumes/odoo_remates_panama_remates-panama-web-data/remates-panama-addons:/mnt/extra-addons
-    command: >
-      --init=sale,stock,account
-    restart: always
+      - odoo_remates_panama_remates-panama-web-data:/var/lib/odoo
+    container_name: remates-panama-web
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - odoo_remates_panama_remates-panama-db-data:/var/lib/postgresql/data
+    container_name: remates-panama-db
 
 volumes:
-  remates-panama-web-data:
-
+  odoo_remates_panama_remates-panama-web-data:
+    external: true
+  odoo_remates_panama_remates-panama-db-data:
+    external: true
