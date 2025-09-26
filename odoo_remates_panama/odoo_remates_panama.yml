@@ -28,4 +28,4 @@ services:
 
 volumes:
   odoo_web_data:
-  odoo_db_data:
+  odoo_remates_panama_remates-panama-db-data:
