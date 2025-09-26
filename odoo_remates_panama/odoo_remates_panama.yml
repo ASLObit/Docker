@@ -3,7 +3,6 @@ version: '3.1'
 services:
   web:
     image: odoo:18.0
-    container_name: remates-panama-web
     depends_on:
       - db
     ports:
@@ -13,22 +12,21 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      - odoo_web_data:/var/lib/odoo
-      - ./extra-addons:/mnt/extra-addons
-    restart: always
+      - rematespanama-web-data:/var/lib/odoo
+      - ./rematespanama-config:/etc/odoo
+      - ./rematespanama-addons:/mnt/extra-addons
+    container_name: rematespanama-web
 
   db:
     image: postgres:13
-    container_name: remates-panama-db
     environment:
       - POSTGRES_DB=postgres
-      - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
     volumes:
-      - odoo_remates_panama_remates-panama-db-data:/var/lib/postgresql/data
-    restart: always
+      - rematespanama-db-data:/var/lib/postgresql/data
+    container_name: rematespanama-db
 
 volumes:
-  odoo_web_data:
-  odoo_remates_panama_remates-panama-db-data:
-    external: true
+  rematespanama-web-data:
+  rematespanama-db-data:
