@@ -13,7 +13,6 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      # Solo usamos un volumen temporal para config/addons
       - odoo_web_data:/var/lib/odoo
     restart: always
 
@@ -25,11 +24,10 @@ services:
       - POSTGRES_USER=odoo
       - POSTGRES_PASSWORD=odoo
     volumes:
-      # Mantiene tu DB original
-      - remates-panama-db-data:/var/lib/postgresql/data
+      - odoo_remates_panama_remates-panama-db-data:/var/lib/postgresql/data
     restart: always
 
 volumes:
   odoo_web_data:
-  remates-panama-db-data:
+  odoo_remates_panama_remates-panama-db-data:
     external: true
