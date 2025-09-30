@@ -22,3 +22,19 @@ services:
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
       - /var/lib/docker/volumes/n8n_files:/home/node/files
+    networks:
+      - cloudflared
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}   # lo copias de Cloudflare Dashboard
+    networks:
+      - cloudflared
+
+networks:
+  cloudflared:
+    driver: bridge
