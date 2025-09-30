@@ -15,7 +15,6 @@ services:
       - GENERIC_TIMEZONE=America/Bogota
       - N8N_SECURE_COOKIE=false
       - N8N_HOST=n8n.asloos.uk
-      - N8N_PORT=5678
       - N8N_PROTOCOL=https
       - N8N_WEBHOOK_URL=https://n8n.asloos.uk/
     user: "1000:1000"
