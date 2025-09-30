@@ -5,6 +5,8 @@ services:
     build: ./n8n-custom
     container_name: n8n
     restart: unless-stopped
+    ports:
+      - "5678:5678"
     environment:
       - TZ=America/Bogota
       - N8N_BASIC_AUTH_ACTIVE=true
@@ -15,6 +17,7 @@ services:
       - N8N_HOST=n8n.asloos.uk
       - N8N_PROTOCOL=https
       - N8N_WEBHOOK_URL=https://n8n.asloos.uk/
+      - WEBHOOK_TUNNEL_URL=https://n8n.asloos.uk/
     user: "1000:1000"
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
