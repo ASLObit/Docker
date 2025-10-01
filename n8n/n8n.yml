@@ -9,11 +9,24 @@ services:
       - "5678:5678"
     environment:
       - TZ=America/Bogota
+      - GENERIC_TIMEZONE=America/Bogota
+
+      # --- Seguridad básica ---
       - N8N_BASIC_AUTH_ACTIVE=true
       - N8N_BASIC_AUTH_USER=admin
       - N8N_BASIC_AUTH_PASSWORD=Colombia2025*
-      - GENERIC_TIMEZONE=America/Bogota
       - N8N_SECURE_COOKIE=false
+
+      # --- Configuración de dominio externo ---
+      - N8N_HOST=n8n.asloos.uk
+      - N8N_PROTOCOL=https
+      - N8N_PORT=443
+      - WEBHOOK_URL=https://n8n.asloos.uk
+      - N8N_PROXY_HOPS=1
+
+      # (opcional) para logs más claros
+      - NODE_ENV=production
+
     user: "1000:1000"
     volumes:
       - /var/lib/docker/volumes/n8n_data:/home/node/.n8n
