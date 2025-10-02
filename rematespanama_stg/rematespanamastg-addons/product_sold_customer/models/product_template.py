@@ -3,51 +3,47 @@ from odoo import api, fields, models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    sold_customer_qty = fields.Float(
-        string="Vendidas (entregado)",
-        compute="_compute_sold_customer_qty",
+    sold_qty = fields.Float(
+        string="Vendidas",
+        compute="_compute_sold_qty",
         digits="Product Unit of Measure",
-        compute_sudo=True,
+        store=False,
     )
 
-    def _compute_sold_customer_qty(self):
-        for tmpl in self:
-            qty = 0.0
-            variants = tmpl.product_variant_ids.ids
-            if not variants:
-                tmpl.sold_customer_qty = 0.0
-                continue
+    def _compute_sold_qty(self):
+        Move = self.env["stock.move"]
+        # Elegir el campo de cantidad que exista en esta build
+        move_fields = Move.fields_get()
+        measure = (
+            "quantity" if "quantity" in move_fields
+            else "quantity_done" if "quantity_done" in move_fields
+            else "product_uom_qty"  # fallback seguro
+        )
 
-            # Movimientos realizados hacia cliente
-            domain = [
-                ("state", "=", "done"),
-                ("product_id", "in", variants),
-                ("location_dest_id.usage", "=", "customer"),
-            ]
-            # Agrupamos por UoM y convertimos a la UoM del template
-            groups = self.env["stock.move.line"].read_group(
-                domain, ["product_uom_id", "qty_done:sum"], ["product_uom_id"]
-            )
-            uom = tmpl.uom_id
-            for g in groups:
-                line_uom = self.env["uom.uom"].browse(g["product_uom_id"][0])
-                qty += line_uom._compute_quantity(g["qty_done"], uom, round=False)
-            tmpl.sold_customer_qty = qty
+        # Obtener todos los product.product (variantes) de las plantillas en lote
+        all_variants = self.mapped("product_variant_ids").ids
+        if not all_variants:
+            for tmpl in self:
+                tmpl.sold_qty = 0.0
+            return
 
-    def action_view_sold_move_lines(self):
-        self.ensure_one()
-        Action = self.env["ir.actions.act_window"]
-        action = {
-            "name": "Movimientos entregados",
-            "type": "ir.actions.act_window",
-            "res_model": "stock.move.line",
-            "view_mode": "tree,form",
-            "domain": [
-                ("state", "=", "done"),
-                ("product_id", "in", self.product_variant_ids.ids),
-                ("location_dest_id.usage", "=", "customer"),
-            ],
-            "context": {"search_default_groupby_product_id": 1},
-            "target": "current",
+        domain = [
+            ("state", "=", "done"),
+            ("picking_code", "=", "outgoing"),
+            ("product_id", "in", all_variants),
+        ]
+        # Agrupar por product_id y sumar la medida
+        rows = Move.read_group(
+            domain,
+            ["product_id", f"{measure}:sum"],
+            ["product_id"],
+        )
+        qty_by_product = {
+            r["product_id"][0]: r[f"{measure}_sum"] for r in rows
         }
-        return action
+
+        for tmpl in self:
+            total = 0.0
+            for p in tmpl.product_variant_ids:
+                total += qty_by_product.get(p.id, 0.0)
+            tmpl.sold_qty = total
