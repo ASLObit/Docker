@@ -1,19 +1,18 @@
 <odoo>
-  <record id="view_product_template_form_inherit_sold"
-          model="ir.ui.view">
-    <field name="name">product.template.form.sold.customer</field>
+  <!-- Añade un stat button en la caja de botones del producto -->
+  <record id="view_product_template_button_box_sold" model="ir.ui.view">
+    <field name="name">product.template.button.box.sold.moves</field>
     <field name="model">product.template</field>
-    <!-- usa el form base de producto -->
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
+    <field name="priority">16</field>
     <field name="arch" type="xml">
-      <!-- Insertamos dentro del <header> -->
-      <xpath expr="//form/header" position="inside">
-        <button name="action_open_sold_moves"
-                type="object"
+      <xpath expr="//div[contains(@class, 'oe_button_box')]" position="inside">
+        <button type="object"
+                name="action_open_sold_moves"
                 class="oe_stat_button"
-                icon="fa-shopping-cart"
-                groups="base.group_user,product.group_product_manager"
-                invisible="type == 'service'"/>
+                groups="base.group_user">
+          <field name="sold_qty" widget="statinfo" string="Vendido (Mov.)"/>
+        </button>
       </xpath>
     </field>
   </record>
