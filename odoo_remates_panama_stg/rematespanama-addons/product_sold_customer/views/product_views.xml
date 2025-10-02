@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_product_template_form_inherit_sold" model="ir.ui.view">
+    <field name="name">product.template.form.sold.customer</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_only_form_view"/>
+    <field name="arch" type="xml">
+      <!-- Smart buttons -->
+      <xpath expr="//div[@name='button_box']" position="inside">
+        <button type="object" name="action_view_sold_move_lines"
+                class="oe_stat_button" icon="fa-shopping-bag">
+          <field name="sold_customer_qty" string="Vendidas" widget="statinfo"/>
+        </button>
+      </xpath>
+    </field>
+  </record>
+</odoo>

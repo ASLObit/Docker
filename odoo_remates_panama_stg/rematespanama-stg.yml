@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  web:
+    image: odoo:18.0
+    depends_on:
+      - db
+    ports:
+      - "8070:8069"
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - rematespanama-web-data:/var/lib/odoo
+      - ./rematespanama-config:/etc/odoo
+      - ./rematespanama-addons:/mnt/extra-addons
+    container_name: rematespanama-web
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    volumes:
+      - rematespanama-db-data:/var/lib/postgresql/data
+    container_name: rematespanama-db
+
+volumes:
+  rematespanama-web-data:
+  rematespanama-db-data:

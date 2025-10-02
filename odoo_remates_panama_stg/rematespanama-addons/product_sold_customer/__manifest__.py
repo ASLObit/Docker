@@ -1,0 +1,13 @@
+{
+    "name": "Product Sold To Customer (no Sales)",
+    "summary": "Muestra unidades entregadas a cliente desde movimientos de stock",
+    "version": "18.0.1.0.0",
+    "license": "LGPL-3",
+    "author": "Tu Equipo",
+    "depends": ["stock"],
+    "data": [
+        "views/product_views.xml",
+    ],
+    "application": False,
+    "installable": True,
+}
