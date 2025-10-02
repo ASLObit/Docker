@@ -21,15 +21,17 @@ class ProductTemplate(models.Model):
         measure = (
             "quantity" if "quantity" in move_fields
             else "quantity_done" if "quantity_done" in move_fields
-            else "product_uom_qty"  # fallback
+            else "product_uom_qty"  # fallback seguro
         )
 
+        # Variantes de todas las plantillas (cálculo vectorizado)
         all_variant_ids = self.mapped("product_variant_ids").ids
         if not all_variant_ids:
             for tmpl in self:
                 tmpl.sold_qty = 0.0
             return
 
+        # ✅ Outgoing robusto: destino = cliente; mantenemos source=internal para evitar devoluciones
         domain = [
             ("state", "=", "done"),
             ("company_id", "=", self.env.company.id),
@@ -74,7 +76,7 @@ class ProductTemplate(models.Model):
         entregas reales (stock.move DONE internal->customer) para cubrir
         ventas por factura directa (sin SO). Evita doble conteo.
         """
-        # 1) comportamiento estándar de Odoo
+        # 1) Comportamiento estándar de Odoo
         super()._compute_sales_count()
 
         Move = self.env["stock.move"]
