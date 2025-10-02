@@ -2,16 +2,15 @@
   <record id="view_product_template_form_inherit_sold" model="ir.ui.view">
     <field name="name">product.template.form.sold.customer</field>
     <field name="model">product.template</field>
-    <!-- Usa la vista de formulario de template -->
+    <!-- Esta es la vista base del formulario de plantilla en v18 -->
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
     <field name="arch" type="xml">
-      <!-- Inserta botón en la caja de smart buttons -->
       <xpath expr="//div[@name='button_box']" position="inside">
         <button type="object"
                 name="action_open_sold_moves"
                 class="oe_stat_button"
                 icon="fa-shopping-cart"
-                attrs="{'invisible': [('type','=','service')]}">
+                invisible="record.is_service"> <!-- ✅ sin attrs -->
           <field name="sold_qty" string="Vendidas" widget="statinfo"/>
         </button>
       </xpath>
