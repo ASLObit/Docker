@@ -1,11 +1,8 @@
-version: '3.9'
-
 services:
   web:
     build:
-      context: .
+      context: .          # misma carpeta donde está el compose
       dockerfile: Dockerfile
-    image: rematespanamastg-web:latest
     depends_on:
       - db
     ports:
@@ -27,7 +24,6 @@ services:
       - POSTGRES_USER=odoo
     volumes:
       - rematespanamastg-db-data:/var/lib/postgresql/data
-    restart: unless-stopped
     container_name: rematespanamastg-db
 
 volumes:
