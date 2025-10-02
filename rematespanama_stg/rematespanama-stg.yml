@@ -11,10 +11,11 @@ services:
       - HOST=db
       - USER=odoo
       - PASSWORD=odoo
+      - ADDONS_PATH=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
     volumes:
       - rematespanamastg-web-data:/var/lib/odoo
-      - ./rematespanamastg-config:/etc/odoo
-      - ./rematespanamastg-addons:/mnt/extra-addons
+      - ./rematespanamastg-config:/etc/odoo:rw
+      - ./rematespanamastg-addons:/mnt/extra-addons:rw
     container_name: rematespanamastg-web
 
   db:
