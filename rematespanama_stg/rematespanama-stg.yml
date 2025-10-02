@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.9'
 
 services:
   web:
@@ -6,7 +6,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8070:8069"
+      - "8071:8069"
     environment:
       - HOST=db
       - USER=odoo
