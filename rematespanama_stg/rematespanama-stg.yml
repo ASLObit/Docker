@@ -12,10 +12,10 @@ services:
       - USER=odoo
       - PASSWORD=odoo
     volumes:
-      - rematespanama-web-data:/var/lib/odoo
-      - ./rematespanama-config:/etc/odoo
-      - ./rematespanama-addons:/mnt/extra-addons
-    container_name: rematespanama-web
+      - rematespanamastg-web-data:/var/lib/odoo
+      - ./rematespanamastg-config:/etc/odoo
+      - ./rematespanamastg-addons:/mnt/extra-addons
+    container_name: rematespanamastg-web
 
   db:
     image: postgres:13
@@ -24,9 +24,9 @@ services:
       - POSTGRES_PASSWORD=odoo
       - POSTGRES_USER=odoo
     volumes:
-      - rematespanama-db-data:/var/lib/postgresql/data
-    container_name: rematespanama-db
+      - rematespanamastg-db-data:/var/lib/postgresql/data
+    container_name: rematespanamastg-db
 
 volumes:
-  rematespanama-web-data:
-  rematespanama-db-data:
+  rematespanamastg-web-data:
+  rematespanamastg-db-data:
