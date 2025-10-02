@@ -2,7 +2,10 @@ version: '3.9'
 
 services:
   web:
-    image: odoo:18.0
+    build:
+      context: ./rematespanamastg_stg
+      dockerfile: Dockerfile
+    image: rematespanamastg-web:latest
     depends_on:
       - db
     ports:
@@ -11,11 +14,9 @@ services:
       - HOST=db
       - USER=odoo
       - PASSWORD=odoo
-      - ADDONS_PATH=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons
     volumes:
       - rematespanamastg-web-data:/var/lib/odoo
-      - ./rematespanamastg-config:/etc/odoo:rw
-      - ./rematespanamastg-addons:/mnt/extra-addons:rw
+    restart: unless-stopped
     container_name: rematespanamastg-web
 
   db:
@@ -26,6 +27,7 @@ services:
       - POSTGRES_USER=odoo
     volumes:
       - rematespanamastg-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
     container_name: rematespanamastg-db
 
 volumes:
