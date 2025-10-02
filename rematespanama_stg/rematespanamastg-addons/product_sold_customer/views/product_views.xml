@@ -1,18 +1,19 @@
 <odoo>
-  <record id="view_product_template_form_inherit_sold" model="ir.ui.view">
+  <record id="view_product_template_form_inherit_sold"
+          model="ir.ui.view">
     <field name="name">product.template.form.sold.customer</field>
     <field name="model">product.template</field>
-    <!-- Esta es la vista base del formulario de plantilla en v18 -->
+    <!-- usa el form base de producto -->
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
     <field name="arch" type="xml">
-      <xpath expr="//div[@name='button_box']" position="inside">
-        <button type="object"
-                name="action_open_sold_moves"
+      <!-- Insertamos dentro del <header> -->
+      <xpath expr="//form/header" position="inside">
+        <button name="action_open_sold_moves"
+                type="object"
                 class="oe_stat_button"
                 icon="fa-shopping-cart"
-                invisible="record.is_service"> <!-- ✅ sin attrs -->
-          <field name="sold_qty" string="Vendidas" widget="statinfo"/>
-        </button>
+                groups="base.group_user,product.group_product_manager"
+                invisible="type == 'service'"/>
       </xpath>
     </field>
   </record>

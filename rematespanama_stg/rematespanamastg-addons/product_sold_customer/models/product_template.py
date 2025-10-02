@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
-# Computa Vendidas sobre stock.move (no move.line) y abre movimientos desde el botón
+
+# Computa "Vendidas" sobre stock.move (salidas a cliente en estado done)
+# y abre los movimientos desde un smart button (action_open_sold_moves).
 
 class ProductTemplate(models.Model):
     _inherit = "product.template"
@@ -13,31 +16,35 @@ class ProductTemplate(models.Model):
 
     def _compute_sold_qty(self):
         Move = self.env["stock.move"]
-        # Elegir el campo de cantidad que exista en esta build
+        # Detectar el campo de cantidad disponible en esta build
         move_fields = Move.fields_get()
         measure = (
             "quantity" if "quantity" in move_fields
             else "quantity_done" if "quantity_done" in move_fields
-            else "product_uom_qty"
+            else "product_uom_qty"  # fallback seguro
         )
 
-        all_variants = self.mapped("product_variant_ids").ids
-        if not all_variants:
+        # Variantes de todas las plantillas a la vez (mejor rendimiento)
+        all_variant_ids = self.mapped("product_variant_ids").ids
+        if not all_variant_ids:
             for tmpl in self:
                 tmpl.sold_qty = 0.0
             return
 
         domain = [
             ("state", "=", "done"),
-            ("picking_code", "=", "outgoing"),
-            ("product_id", "in", all_variants),
+            ("picking_code", "=", "outgoing"),   # salidas
+            ("product_id", "in", all_variant_ids),
         ]
+
         rows = Move.read_group(
             domain,
             ["product_id", f"{measure}:sum"],
             ["product_id"],
         )
-        qty_by_product = {r["product_id"][0]: r[f"{measure}_sum"] for r in rows}
+        qty_by_product = {
+            r["product_id"][0]: r.get(f"{measure}_sum", 0.0) for r in rows
+        }
 
         for tmpl in self:
             total = 0.0
@@ -46,7 +53,7 @@ class ProductTemplate(models.Model):
             tmpl.sold_qty = total
 
     def action_open_sold_moves(self):
-        """Botón del smart button: abrir movimientos de salida 'done' del producto."""
+        """Abrir movimientos de salida 'done' del producto (cualquier variante)."""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
