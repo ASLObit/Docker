@@ -3,7 +3,7 @@ version: '3.9'
 services:
   web:
     build:
-      context: ./rematespanamastg_stg
+      context: .
       dockerfile: Dockerfile
     image: rematespanamastg-web:latest
     depends_on:
