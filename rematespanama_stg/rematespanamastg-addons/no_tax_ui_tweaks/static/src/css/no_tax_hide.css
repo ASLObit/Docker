@@ -1,0 +1,12 @@
+/* Ocultar campos en formularios (independiente de la vista concreta) */
+.o_form_view .o_field_widget[name="detailed_type"],
+.o_form_view label:has(+ .o_field_widget[name="detailed_type"]),
+.o_form_view .o_field_widget[name="taxes_id"],
+.o_form_view label:has(+ .o_field_widget[name="taxes_id"]),
+.o_form_view .o_field_widget[name="supplier_taxes_id"],
+.o_form_view label:has(+ .o_field_widget[name="supplier_taxes_id"]),
+/* Líneas de facturas */
+.o_form_view .o_field_widget[name="tax_ids"],
+.o_form_view label:has(+ .o_field_widget[name="tax_ids"]) {
+  display: none !important;
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="assets_backend" name="NoTax Assets" inherit_id="web.assets_backend">
+    <xpath expr="." position="inside">
+      <link rel="stylesheet" type="text/css" href="/no_tax_ui_tweaks/static/src/css/no_tax_hide.css"/>
+    </xpath>
+  </template>
+</odoo>
