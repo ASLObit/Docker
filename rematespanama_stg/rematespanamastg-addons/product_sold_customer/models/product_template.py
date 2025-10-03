@@ -14,24 +14,30 @@ class ProductTemplate(models.Model):
     )
 
     def _compute_sold_qty(self):
+        """
+        Suma cantidades entregadas a cliente desde stock.move en estado done.
+        Usa el campo de cantidad que exista en esta build: quantity_done /
+        quantity / product_uom_qty (fallback).
+        """
         Move = self.env["stock.move"]
 
-        # Campo de cantidad disponible en esta build
         move_fields = Move.fields_get()
-        measure = (
-            "quantity" if "quantity" in move_fields
-            else "quantity_done" if "quantity_done" in move_fields
-            else "product_uom_qty"  # fallback seguro
-        )
+        # prioridad: delivered -> pedido -> planificado
+        if "quantity_done" in move_fields:
+            measure = "quantity_done"
+        elif "quantity" in move_fields:
+            measure = "quantity"
+        else:
+            measure = "product_uom_qty"
 
-        # Variantes de todas las plantillas (cálculo vectorizado)
+        # Variantes de todas las plantillas (vectorizado)
         all_variant_ids = self.mapped("product_variant_ids").ids
         if not all_variant_ids:
             for tmpl in self:
                 tmpl.sold_qty = 0.0
             return
 
-        # ✅ Outgoing robusto: destino = cliente; mantenemos source=internal para evitar devoluciones
+        # Outgoing robusto: interno -> cliente
         domain = [
             ("state", "=", "done"),
             ("company_id", "=", self.env.company.id),
@@ -76,18 +82,20 @@ class ProductTemplate(models.Model):
         entregas reales (stock.move DONE internal->customer) para cubrir
         ventas por factura directa (sin SO). Evita doble conteo.
         """
-        # 1) Comportamiento estándar de Odoo
+        # 1) Comportamiento estándar de Odoo (SO)
         super()._compute_sales_count()
 
         Move = self.env["stock.move"]
         move_fields = Move.fields_get()
-        measure = (
-            "quantity" if "quantity" in move_fields
-            else "quantity_done" if "quantity_done" in move_fields
-            else "product_uom_qty"
-        )
+        if "quantity_done" in move_fields:
+            measure = "quantity_done"
+        elif "quantity" in move_fields:
+            measure = "quantity"
+        else:
+            measure = "product_uom_qty"
 
         has_sale_line = "sale_line_id" in move_fields
+
         all_variant_ids = self.mapped("product_variant_ids").ids
         if not all_variant_ids:
             return
@@ -99,15 +107,15 @@ class ProductTemplate(models.Model):
             ("location_dest_id.usage", "=", "customer"),
             ("product_id", "in", all_variant_ids),
         ]
+        # Si el movimiento ya está vinculado a una línea de venta, no lo volvemos a sumar.
         if has_sale_line:
-            # si existe sale_line_id, no contamos movimientos que ya vienen de SO
             domain.append(("sale_line_id", "=", False))
 
         rows = Move.read_group(domain, ["product_id", f"{measure}:sum"], ["product_id"])
-        qty_by_product = {r["product_id"][0]: r.get(f"{measure}_sum", 0.0) for r in rows}
+        extra_by_product = {r["product_id"][0]: r.get(f"{measure}_sum", 0.0) for r in rows}
 
         for tmpl in self:
             add = 0.0
             for p in tmpl.product_variant_ids:
-                add += qty_by_product.get(p.id, 0.0)
+                add += extra_by_product.get(p.id, 0.0)
             tmpl.sales_count = (tmpl.sales_count or 0.0) + add
