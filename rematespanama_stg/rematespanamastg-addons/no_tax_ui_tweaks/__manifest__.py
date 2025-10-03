@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
 {
     "name": "No Taxes + UI Tweaks (Remates Panamá)",
-    "version": "18.0.0.4",  # <— subido
+    "version": "18.0.0.5",  # <- súbela
     "author": "ASLObit",
     "license": "LGPL-3",
     "depends": ["base", "web", "product", "account", "contacts"],
     "data": [
-        "views/assets.xml",            # <— nuevo formato ir.asset
-        "views/res_partner_views.xml", # Contacto -> Dirección y ocultar campos
+        "views/assets.xml",
+        "views/res_partner_views.xml",
     ],
     "post_init_hook": "post_init_hook",
-    "application": False,
     "installable": True,
 }

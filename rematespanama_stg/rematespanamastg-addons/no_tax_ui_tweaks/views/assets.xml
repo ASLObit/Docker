@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
   <data noupdate="1">
-    <!-- Incluir el CSS en el bundle de backend (formato Odoo 18) -->
     <record id="no_tax_hide_css" model="ir.asset">
       <field name="name">NoTax Hide CSS</field>
       <field name="bundle">web.assets_backend</field>
