@@ -13,19 +13,46 @@ class ProductTemplate(models.Model):
         store=False,
     )
 
-    def _compute_sold_qty(self):
+    def _sum_moves_by_product(self, domain):
+        """
+        Suma robusta por producto SIN usar read_group (algunas builds
+        no agregan correctamente 'quantity'). Preferencias:
+        - quantity_done si existe y tiene datos
+        - product_uom_qty
+        - quantity (fallback)
+        """
         Move = self.env["stock.move"]
-
-        # Campos disponibles en esta build
         move_fields = Move.fields_get()
-        # Para read_group usamos un campo sumable y almacenado
-        measure_rg = (
-            "product_uom_qty" if "product_uom_qty" in move_fields
-            else ("quantity_done" if "quantity_done" in move_fields else None)
-        )
-        # Fallback para suma manual cuando no hay campo agregable
-        measure_fallback = "quantity" if "quantity" in move_fields else None
 
+        # Campos posibles
+        has_qty_done = "quantity_done" in move_fields
+        has_uom_qty = "product_uom_qty" in move_fields
+        has_qty = "quantity" in move_fields
+
+        fields_to_read = ["product_id"]
+        # Leemos todos los que existan; luego elegimos qué sumar por cada fila
+        if has_qty_done:
+            fields_to_read.append("quantity_done")
+        if has_uom_qty:
+            fields_to_read.append("product_uom_qty")
+        if has_qty:
+            fields_to_read.append("quantity")
+
+        qty_by_product = {}
+        for r in Move.search(domain).read(fields_to_read):
+            pid = r["product_id"][0]
+            # preferencia: quantity_done > product_uom_qty > quantity
+            val = 0.0
+            if has_qty_done and r.get("quantity_done") not in (False, None):
+                val = r.get("quantity_done") or 0.0
+            elif has_uom_qty and r.get("product_uom_qty") not in (False, None):
+                val = r.get("product_uom_qty") or 0.0
+            elif has_qty:
+                val = r.get("quantity") or 0.0
+            qty_by_product[pid] = qty_by_product.get(pid, 0.0) + val
+        return qty_by_product
+
+    def _compute_sold_qty(self):
         # Variantes de todas las plantillas (cálculo vectorizado)
         all_variant_ids = self.mapped("product_variant_ids").ids
         if not all_variant_ids:
@@ -33,6 +60,7 @@ class ProductTemplate(models.Model):
                 tmpl.sold_qty = 0.0
             return
 
+        # Outgoing robusto: internal -> customer, DONE, compañía actual
         domain = [
             ("state", "=", "done"),
             ("company_id", "=", self.env.company.id),
@@ -41,23 +69,7 @@ class ProductTemplate(models.Model):
             ("product_id", "in", all_variant_ids),
         ]
 
-        qty_by_product = {}
-
-        if measure_rg:
-            # Ruta rápida y agregable
-            rows = Move.read_group(domain, ["product_id", f"{measure_rg}:sum"], ["product_id"])
-            qty_by_product = {
-                r["product_id"][0]: r.get(f"{measure_rg}_sum", 0.0) or 0.0
-                for r in rows
-            }
-        elif measure_fallback:
-            # Fallback: sumar manualmente 'quantity'
-            for r in Move.search(domain).read(["product_id", measure_fallback]):
-                pid = r["product_id"][0]
-                qty_by_product[pid] = qty_by_product.get(pid, 0.0) + (r.get(measure_fallback) or 0.0)
-        else:
-            # No hay nada que sumar, dejamos 0.0
-            qty_by_product = {}
+        qty_by_product = self._sum_moves_by_product(domain)
 
         for tmpl in self:
             total = 0.0
@@ -92,20 +104,13 @@ class ProductTemplate(models.Model):
         entregas reales (stock.move DONE internal->customer) para cubrir
         ventas por factura directa (sin SO). Evita doble conteo.
         """
-        # 1) Comportamiento estándar de Odoo
+        # 1) Comportamiento estándar de Odoo (cuenta SO)
         super()._compute_sales_count()
 
         Move = self.env["stock.move"]
         move_fields = Move.fields_get()
-
-        # Igual que arriba: preferimos campo sumable, si no, fallback a suma manual
-        measure_rg = (
-            "product_uom_qty" if "product_uom_qty" in move_fields
-            else ("quantity_done" if "quantity_done" in move_fields else None)
-        )
-        measure_fallback = "quantity" if "quantity" in move_fields else None
-
         has_sale_line = "sale_line_id" in move_fields
+
         all_variant_ids = self.mapped("product_variant_ids").ids
         if not all_variant_ids:
             return
@@ -118,22 +123,10 @@ class ProductTemplate(models.Model):
             ("product_id", "in", all_variant_ids),
         ]
         if has_sale_line:
-            # si existe sale_line_id, no contamos movimientos que ya vienen de SO
+            # Si viene de SO, ya lo contó el estándar → evitar doble conteo
             domain.append(("sale_line_id", "=", False))
 
-        qty_by_product = {}
-        if measure_rg:
-            rows = Move.read_group(domain, ["product_id", f"{measure_rg}:sum"], ["product_id"])
-            qty_by_product = {
-                r["product_id"][0]: r.get(f"{measure_rg}_sum", 0.0) or 0.0
-                for r in rows
-            }
-        elif measure_fallback:
-            for r in Move.search(domain).read(["product_id", measure_fallback]):
-                pid = r["product_id"][0]
-                qty_by_product[pid] = qty_by_product.get(pid, 0.0) + (r.get(measure_fallback) or 0.0)
-        else:
-            qty_by_product = {}
+        qty_by_product = self._sum_moves_by_product(domain)
 
         for tmpl in self:
             add = 0.0
