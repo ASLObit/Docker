@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <template id="assets_backend" name="NoTax Assets" inherit_id="web.assets_backend">
-    <xpath expr="." position="inside">
-      <link rel="stylesheet" type="text/css" href="/no_tax_ui_tweaks/static/src/css/no_tax_hide.css"/>
-    </xpath>
-  </template>
+  <data noupdate="1">
+    <!-- Incluir el CSS en el bundle de backend (formato Odoo 18) -->
+    <record id="no_tax_hide_css" model="ir.asset">
+      <field name="name">NoTax Hide CSS</field>
+      <field name="bundle">web.assets_backend</field>
+      <field name="path">/no_tax_ui_tweaks/static/src/css/no_tax_hide.css</field>
+      <field name="directive">include</field>
+    </record>
+  </data>
 </odoo>
