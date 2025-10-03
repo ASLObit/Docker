@@ -5,32 +5,44 @@ from odoo import api, fields, models, _
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    # --- KPI propio "Vendidas" (movimientos de salida DONE) ---
+    # --- KPI propio "Vendidas (Mov.)": salidas DONE interno -> cliente ---
     sold_qty = fields.Float(
-        string="Vendidas",
+        string="Vendidas (Mov.)",
         compute="_compute_sold_qty",
         digits="Product Unit of Measure",
         store=False,
     )
 
-    def _sum_moves_by_product(self, domain):
+    def _compute_sold_qty(self):
         """
-        Suma robusta por producto SIN usar read_group (algunas builds
-        no agregan correctamente 'quantity'). Preferencias:
-        - quantity_done si existe y tiene datos
-        - product_uom_qty
-        - quantity (fallback)
+        Suma movimientos reales de salida (stock.move) en estado 'done',
+        desde ubicaciones de uso 'internal' a 'customer', para todas las
+        variantes del producto. Se evita read_group porque en algunos
+        despliegues el campo de cantidad no está almacenado.
         """
         Move = self.env["stock.move"]
         move_fields = Move.fields_get()
-
-        # Campos posibles
         has_qty_done = "quantity_done" in move_fields
         has_uom_qty = "product_uom_qty" in move_fields
         has_qty = "quantity" in move_fields
 
+        # Variantes por plantilla y universo de variantes
+        variants_by_tmpl = {tmpl.id: tmpl.product_variant_ids.ids for tmpl in self}
+        all_variant_ids = [pid for ids in variants_by_tmpl.values() for pid in ids]
+        if not all_variant_ids:
+            for tmpl in self:
+                tmpl.sold_qty = 0.0
+            return
+
+        domain = [
+            ("state", "=", "done"),
+            ("company_id", "=", self.env.company.id),
+            ("location_id.usage", "=", "internal"),
+            ("location_dest_id.usage", "=", "customer"),
+            ("product_id", "in", all_variant_ids),
+        ]
+
         fields_to_read = ["product_id"]
-        # Leemos todos los que existan; luego elegimos qué sumar por cada fila
         if has_qty_done:
             fields_to_read.append("quantity_done")
         if has_uom_qty:
@@ -41,44 +53,23 @@ class ProductTemplate(models.Model):
         qty_by_product = {}
         for r in Move.search(domain).read(fields_to_read):
             pid = r["product_id"][0]
-            # preferencia: quantity_done > product_uom_qty > quantity
             val = 0.0
-            if has_qty_done and r.get("quantity_done") not in (False, None):
+            if has_qty_done and r.get("quantity_done") not in (None, False):
                 val = r.get("quantity_done") or 0.0
-            elif has_uom_qty and r.get("product_uom_qty") not in (False, None):
+            elif has_uom_qty and r.get("product_uom_qty") not in (None, False):
                 val = r.get("product_uom_qty") or 0.0
             elif has_qty:
                 val = r.get("quantity") or 0.0
             qty_by_product[pid] = qty_by_product.get(pid, 0.0) + val
-        return qty_by_product
-
-    def _compute_sold_qty(self):
-        # Variantes de todas las plantillas (cálculo vectorizado)
-        all_variant_ids = self.mapped("product_variant_ids").ids
-        if not all_variant_ids:
-            for tmpl in self:
-                tmpl.sold_qty = 0.0
-            return
-
-        # Outgoing robusto: internal -> customer, DONE, compañía actual
-        domain = [
-            ("state", "=", "done"),
-            ("company_id", "=", self.env.company.id),
-            ("location_id.usage", "=", "internal"),
-            ("location_dest_id.usage", "=", "customer"),
-            ("product_id", "in", all_variant_ids),
-        ]
-
-        qty_by_product = self._sum_moves_by_product(domain)
 
         for tmpl in self:
             total = 0.0
-            for p in tmpl.product_variant_ids:
-                total += qty_by_product.get(p.id, 0.0)
+            for pid in variants_by_tmpl.get(tmpl.id, []):
+                total += qty_by_product.get(pid, 0.0)
             tmpl.sold_qty = total
 
     def action_open_sold_moves(self):
-        """Abrir movimientos de salida 'done' del producto (cualquier variante)."""
+        """Smart button: abrir movimientos de salida 'done' del producto."""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
@@ -102,19 +93,27 @@ class ProductTemplate(models.Model):
         """
         Mantiene el cálculo estándar (líneas de venta) y ADEMÁS suma
         entregas reales (stock.move DONE internal->customer) para cubrir
-        ventas por factura directa (sin SO). Evita doble conteo.
+        ventas por factura directa (sin SO). Evita doble conteo usando
+        sale_line_id = False cuando existe ese campo.
         """
-        # 1) Comportamiento estándar de Odoo (cuenta SO)
+        # 1) comportamiento estándar de Odoo (SO → sales_count)
         super()._compute_sales_count()
 
         Move = self.env["stock.move"]
         move_fields = Move.fields_get()
-        has_sale_line = "sale_line_id" in move_fields
 
-        all_variant_ids = self.mapped("product_variant_ids").ids
+        has_sale_line = "sale_line_id" in move_fields
+        has_qty_done = "quantity_done" in move_fields
+        has_uom_qty = "product_uom_qty" in move_fields
+        has_qty = "quantity" in move_fields
+
+        # Variantes por plantilla y universo de variantes
+        variants_by_tmpl = {tmpl.id: tmpl.product_variant_ids.ids for tmpl in self}
+        all_variant_ids = [pid for ids in variants_by_tmpl.values() for pid in ids]
         if not all_variant_ids:
             return
 
+        # 2) movimientos reales de salida (hechos) hacia cliente
         domain = [
             ("state", "=", "done"),
             ("company_id", "=", self.env.company.id),
@@ -122,14 +121,33 @@ class ProductTemplate(models.Model):
             ("location_dest_id.usage", "=", "customer"),
             ("product_id", "in", all_variant_ids),
         ]
+        # no contar lo que ya proviene de líneas de venta (para no duplicar)
         if has_sale_line:
-            # Si viene de SO, ya lo contó el estándar → evitar doble conteo
             domain.append(("sale_line_id", "=", False))
 
-        qty_by_product = self._sum_moves_by_product(domain)
+        fields_to_read = ["product_id"]
+        if has_qty_done:
+            fields_to_read.append("quantity_done")
+        if has_uom_qty:
+            fields_to_read.append("product_uom_qty")
+        if has_qty:
+            fields_to_read.append("quantity")
 
+        qty_by_product = {}
+        for r in Move.search(domain).read(fields_to_read):
+            pid = r["product_id"][0]
+            val = 0.0
+            if has_qty_done and r.get("quantity_done") not in (None, False):
+                val = r.get("quantity_done") or 0.0
+            elif has_uom_qty and r.get("product_uom_qty") not in (None, False):
+                val = r.get("product_uom_qty") or 0.0
+            elif has_qty:
+                val = r.get("quantity") or 0.0
+            qty_by_product[pid] = qty_by_product.get(pid, 0.0) + val
+
+        # 3) sumar a cada plantilla sin duplicar lo ya calculado por Odoo
         for tmpl in self:
             add = 0.0
-            for p in tmpl.product_variant_ids:
-                add += qty_by_product.get(p.id, 0.0)
+            for pid in variants_by_tmpl.get(tmpl.id, []):
+                add += qty_by_product.get(pid, 0.0)
             tmpl.sales_count = (tmpl.sales_count or 0.0) + add
