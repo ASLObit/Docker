@@ -1,19 +1,6 @@
 <odoo>
-  <!-- Añade un stat button en la caja de botones del producto -->
-  <record id="view_product_template_button_box_sold" model="ir.ui.view">
-    <field name="name">product.template.button.box.sold.moves</field>
-    <field name="model">product.template</field>
-    <field name="inherit_id" ref="product.product_template_only_form_view"/>
-    <field name="priority">16</field>
-    <field name="arch" type="xml">
-      <xpath expr="//div[contains(@class, 'oe_button_box')]" position="inside">
-        <button type="object"
-                name="action_open_sold_moves"
-                class="oe_stat_button"
-                groups="base.group_user">
-          <field name="sold_qty" widget="statinfo" string="Vendido (Mov.)"/>
-        </button>
-      </xpath>
-    </field>
-  </record>
+    <!-- Desactiva la vista heredada que agregaba el botón "Vendido (Mov.)" -->
+    <record id="view_product_template_button_box_sold" model="ir.ui.view">
+        <field name="active">0</field>
+    </record>
 </odoo>
