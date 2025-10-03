@@ -1,6 +1,6 @@
 {
     "name": "No Taxes + UI Tweaks (Remates Panamá)",
-    "version": "18.0.0.5",  # <- súbela
+    "version": "18.0.0.6",  # <- súbela para forzar actualización
     "author": "ASLObit",
     "license": "LGPL-3",
     "depends": ["base", "web", "product", "account", "contacts"],
