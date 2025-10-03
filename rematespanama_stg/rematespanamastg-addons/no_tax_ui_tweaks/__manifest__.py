@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "No Taxes + UI Tweaks (Remates Panamá)",
-    "version": "18.0.0.3",  # <— subido
+    "version": "18.0.0.4",  # <— subido
     "author": "ASLObit",
     "license": "LGPL-3",
     "depends": ["base", "web", "product", "account", "contacts"],

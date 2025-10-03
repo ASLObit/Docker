@@ -2,16 +2,17 @@
 from odoo import api, SUPERUSER_ID
 
 def post_init_hook(cr, registry):
+    """Se ejecuta justo después de instalar el módulo."""
     env = api.Environment(cr, SUPERUSER_ID, {})
 
-    # Productos existentes: sin impuestos y tipo "product" (Bien)
+    # Productos: sin impuestos y tipo "Bien"
     env["product.template"].search([]).write({
         "taxes_id": [(6, 0, [])],
         "supplier_taxes_id": [(6, 0, [])],
         "detailed_type": "product",
     })
 
-    # Compañías: quitar impuestos por defecto si esos campos existen
+    # Compañías: quitar impuestos por defecto (si existen esos campos)
     Company = env["res.company"]
     to_clear = {}
     for f in ("account_sale_tax_id", "account_purchase_tax_id"):
