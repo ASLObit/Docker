@@ -2,8 +2,7 @@
 from odoo import api, SUPERUSER_ID
 
 def _run_cleanup(env):
-    """Lógica del hook: forzar 'Bien' y sin impuestos en productos + limpiar
-    impuestos por defecto en compañías. Ejecuta con superusuario."""
+    """Forzar 'Bien' y sin impuestos en productos + limpiar impuestos por defecto en compañías."""
     env = env.sudo()
 
     # Productos: sin impuestos y tipo "Bien"
@@ -13,16 +12,16 @@ def _run_cleanup(env):
         "detailed_type": "product",
     })
 
-    # Compañías: quitar impuestos por defecto si existen esos campos
+    # Compañías: quitar impuestos por defecto si esos campos existen
     Company = env["res.company"]
-    updates = {}
+    vals = {}
     for f in ("account_sale_tax_id", "account_purchase_tax_id"):
         if f in Company._fields:
-            updates[f] = False
-    if updates:
-        Company.search([]).write(updates)
+            vals[f] = False
+    if vals:
+        Company.search([]).write(vals)
 
-def post_init_hook(*args, **kwargs):
+def post_init_hook(*args, **_kwargs):
     """
     Compatible con Odoo que llama:
       - post_init_hook(env)
@@ -30,18 +29,15 @@ def post_init_hook(*args, **kwargs):
     """
     if not args:
         return
-    # Caso 1: Odoo pasa env directo
-    try:
-        from odoo.api import Environment
-        if len(args) == 1 and hasattr(args[0], "cr") and hasattr(args[0], "uid"):
-            env = args[0]
-            _run_cleanup(env)
-            return
-    except Exception:
-        pass
 
-    # Caso 2: Odoo pasa (cr, registry)
+    first = args[0]
+    # Caso 1: nos pasan un Environment (env)
+    if hasattr(first, "cr") and hasattr(first, "uid"):
+        _run_cleanup(first)
+        return
+
+    # Caso 2: nos pasan (cr, registry)
     if len(args) >= 2:
-        cr = args[0]
+        cr = first
         env = api.Environment(cr, SUPERUSER_ID, {})
         _run_cleanup(env)
