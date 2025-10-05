@@ -1,4 +1,4 @@
-/* --- Ocultar "Tipo de producto" --- */
+/* Ocultar "Tipo de producto" (tanto detailed_type como type) */
 .o_form_view div[name="detailed_type"],
 .o_form_view label[for="detailed_type"],
 .o_form_view div[name="type"],
@@ -6,13 +6,10 @@
   display: none !important;
 }
 
-/* --- Ocultar impuestos del producto (ventas y compra) --- */
+/* Ocultar impuestos del producto (ventas y compra) */
 .o_form_view div[name="taxes_id"],
 .o_form_view label[for="taxes_id"],
 .o_form_view div[name="supplier_taxes_id"],
 .o_form_view label[for="supplier_taxes_id"] {
   display: none !important;
 }
-
-/* Nota: estos selectores cubren el formulario de product.template y, si aparece,
-   el de product.product. No dependemos de XPaths frágiles. */
