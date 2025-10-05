@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Product Goods Only UI",
-    "version": "18.0.0.3",
+    "version": "18.0.0.4",  # ⬅️ súbelo para forzar upgrade
     "summary": "Oculta Tipo de producto e impuestos; fuerza Bien y sin impuestos.",
     "author": "mstg",
     "license": "LGPL-3",
-    "depends": ["web", "product"],
+    "depends": ["product"],
     "data": [
-        "views/assets.xml",
+        "views/product_views.xml",   # ⬅️ nueva vista heredada
     ],
     "installable": True,
     "application": False,

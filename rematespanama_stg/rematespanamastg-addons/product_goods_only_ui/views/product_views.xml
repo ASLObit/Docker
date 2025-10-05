@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="product_template_hide_type_and_taxes" model="ir.ui.view">
+    <field name="name">product.template.hide.type.taxes</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_only_form_view"/>
+    <field name="priority">98</field>
+    <field name="arch" type="xml">
+
+      <!-- Tipo de producto (algunas builds usan 'type', otras 'detailed_type') -->
+      <xpath expr="//field[@name='type']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+      <xpath expr="//field[@name='detailed_type']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+
+      <!-- Impuesto de ventas -->
+      <xpath expr="//field[@name='taxes_id']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+
+      <!-- Impuestos de compra -->
+      <xpath expr="//field[@name='supplier_taxes_id']" position="attributes">
+        <attribute name="invisible">1</attribute>
+      </xpath>
+
+    </field>
+  </record>
+</odoo>

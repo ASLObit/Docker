@@ -7,12 +7,10 @@ class ProductTemplate(models.Model):
     @api.model
     def default_get(self, fields_list):
         vals = super().default_get(fields_list)
-        # Fuerza tipo Bien/product
         if "detailed_type" in self._fields:
             vals["detailed_type"] = "product"
         if "type" in self._fields:
             vals["type"] = "product"
-        # Limpia impuestos por defecto
         if "taxes_id" in self._fields:
             vals["taxes_id"] = [(6, 0, [])]
         if "supplier_taxes_id" in self._fields:
@@ -31,7 +29,6 @@ class ProductTemplate(models.Model):
             if "supplier_taxes_id" in self._fields:
                 vals["supplier_taxes_id"] = [(6, 0, [])]
         recs = super().create(vals_list)
-        # Doble seguro post-create
         for r in recs:
             fix = {}
             if "detailed_type" in r._fields and r.detailed_type != "product":
@@ -47,7 +44,6 @@ class ProductTemplate(models.Model):
         return recs
 
     def write(self, vals):
-        # Blindaje en edición
         if "detailed_type" in vals:
             vals["detailed_type"] = "product"
         if "type" in vals:
@@ -57,7 +53,6 @@ class ProductTemplate(models.Model):
         if "supplier_taxes_id" in vals:
             vals["supplier_taxes_id"] = [(6, 0, [])]
         res = super().write(vals)
-        # Doble seguro post-write
         for r in self:
             fix = {}
             if "detailed_type" in r._fields and r.detailed_type != "product":
