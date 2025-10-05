@@ -1,0 +1,7 @@
+/* Quita mayúsculas forzadas SOLO para el grupo con clase no-upper */
+.o_form_view .no-upper .o_group_title,
+.o_form_view .no-upper .o_form_label,
+.o_form_view .no-upper > .o_horizontal_separator {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
