@@ -25,9 +25,12 @@
         <attribute name="invisible">1</attribute>
       </xpath>
       <xpath expr="//field[@name='street']/ancestor::group[1]" position="attributes">
-        <attribute name="string">Dirección</attribute>
+        <!-- deja el grupo sin título para que no aparezca el separador -->
+        <attribute name="string"></attribute>
+        <!-- puedes dejar la clase; ya no hace falta, pero no molesta -->
         <attribute name="class" add="no-upper"/>
       </xpath>
+
 
     </field>
   </record>
