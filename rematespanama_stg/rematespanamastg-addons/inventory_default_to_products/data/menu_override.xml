@@ -1,0 +1,11 @@
+<odoo>
+  <!--
+    Hacemos que el menú raíz de Inventario tenga acción propia:
+    abrir la lista de Productos (product.template).
+    NOTA: el id de la acción suele ser product.product_template_action.
+    Si en tu base difiere, cámbialo (indicaciones abajo).
+  -->
+  <record id="stock.menu_stock_root" model="ir.ui.menu">
+    <field name="action" ref="product.product_template_action"/>
+  </record>
+</odoo>
