@@ -1,12 +1,10 @@
-/* Ocultar los dos stats de la caja superior en Productos */
-
-/* Si existen con esos name, desaparecen: */
+/* Reglas de reordenamiento y Entrada/Salida en la caja superior */
 .o_form_view .oe_button_box .oe_stat_button[name="action_open_reordering_rules"],
 .o_form_view .oe_button_box .oe_stat_button[name="action_view_stock_moves"] {
   display: none !important;
 }
 
-/* Plan B: ocúltalos por el ícono típico (reordenamiento=fa-refresh, entradas/salidas=fa-exchange) */
+/* Plan B por iconos comunes */
 .o_form_view .oe_button_box .oe_stat_button:has(.fa-refresh),
 .o_form_view .oe_button_box .oe_stat_button:has(.fa-exchange) {
   display: none !important;
