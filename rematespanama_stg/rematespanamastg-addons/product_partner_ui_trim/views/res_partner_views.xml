@@ -1,16 +1,17 @@
 <odoo>
-  <!-- Quitar campos y renombrar "Contacto" a "Dirección" en Clientes -->
+  <!-- Recorte de formulario de clientes: renombrar "Contacto" -> "Dirección" y ocultar campos -->
   <record id="res_partner_trim_form" model="ir.ui.view">
     <field name="name">res.partner.trim.form</field>
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="base.view_partner_form"/>
     <field name="arch" type="xml">
-      <!-- Cambiar etiqueta del grupo de dirección -->
-      <xpath expr="//group[@name='contact']" position="attributes">
+
+      <!-- Renombrar el grupo de dirección: tomamos el group ancestro de street -->
+      <xpath expr="//field[@name='street']/ancestor::group[1]" position="attributes">
         <attribute name="string">Dirección</attribute>
       </xpath>
 
-      <!-- Ocultar campos: Puesto de trabajo, Sitio web, Título, Etiquetas -->
+      <!-- Ocultar campos no usados -->
       <xpath expr="//field[@name='function']" position="attributes">
         <attribute name="invisible">1</attribute>
       </xpath>
@@ -23,6 +24,7 @@
       <xpath expr="//field[@name='category_id']" position="attributes">
         <attribute name="invisible">1</attribute>
       </xpath>
+
     </field>
   </record>
 </odoo>
