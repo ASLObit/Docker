@@ -3,15 +3,13 @@
   <record id="product_template_hide_type_and_taxes" model="ir.ui.view">
     <field name="name">product.template.hide.type.taxes</field>
     <field name="model">product.template</field>
+    <!-- Si en tu base el id es el "only", mantenlo; si no, cambia por product.product_template_form_view -->
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
     <field name="priority">98</field>
     <field name="arch" type="xml">
 
-      <!-- Tipo de producto (algunas builds usan 'type', otras 'detailed_type') -->
-      <xpath expr="//field[@name='type']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-      <xpath expr="//field[@name='detailed_type']" position="attributes">
+      <!-- Tipo de producto: funciona si existe 'type' o 'detailed_type' -->
+      <xpath expr="//field[@name='type' or @name='detailed_type']" position="attributes">
         <attribute name="invisible">1</attribute>
       </xpath>
 
