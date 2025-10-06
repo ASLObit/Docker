@@ -1,28 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="product_template_hide_type_and_taxes" model="ir.ui.view">
-    <field name="name">product.template.hide.type.taxes</field>
+  <!-- Ocultar únicamente el tipo de producto -->
+  <record id="product_template_hide_detailed_type" model="ir.ui.view">
+    <field name="name">product.template.hide.detailed.type.only</field>
     <field name="model">product.template</field>
-    <!-- Si en tu base el id es el "only", mantenlo; si no, cambia por product.product_template_form_view -->
     <field name="inherit_id" ref="product.product_template_only_form_view"/>
-    <field name="priority">98</field>
+    <!-- prioridad alta para que aplique siempre -->
+    <field name="priority">50</field>
     <field name="arch" type="xml">
-
-      <!-- Tipo de producto: funciona si existe 'type' o 'detailed_type' -->
-      <xpath expr="//field[@name='type' or @name='detailed_type']" position="attributes">
+      <xpath expr="//field[@name='detailed_type']" position="attributes">
         <attribute name="invisible">1</attribute>
+        <attribute name="modifiers">{ "invisible": true }</attribute>
       </xpath>
-
-      <!-- Impuesto de ventas -->
-      <xpath expr="//field[@name='taxes_id']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-
-      <!-- Impuestos de compra -->
-      <xpath expr="//field[@name='supplier_taxes_id']" position="attributes">
-        <attribute name="invisible">1</attribute>
-      </xpath>
-
     </field>
   </record>
 </odoo>

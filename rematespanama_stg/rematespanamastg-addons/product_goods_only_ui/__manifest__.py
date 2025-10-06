@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Product Goods Only UI",
-    "version": "18.0.0.5",  # ⬅️ súbelo para forzar upgrade
+    "version": "18.0.0.6",  # ⬅️ súbelo para forzar upgrade
     "summary": "Oculta Tipo de producto e impuestos; fuerza Bien y sin impuestos.",
     "author": "mstg",
     "license": "LGPL-3",
