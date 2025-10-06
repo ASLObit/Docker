@@ -1,30 +1,39 @@
 # coding: utf-8
 from odoo import api, SUPERUSER_ID
 
-def _apply_no_decimals(env):
-    """Forzar que las monedas usadas por las compañías no tengan decimales."""
-    env = env.sudo()
-    companies = env['res.company'].search([])
-    currencies = companies.mapped('currency_id')
-    if currencies:
-        # rounding=1.0  => decimal_places = 0 (sin decimales)
-        currencies.write({'rounding': 1.0})
+def _ensure_env(*args, **kwargs):
+    """
+    Devuelve un Environment con superusuario (sudo) a partir de:
+      - env (instancia real)
+      - (cr, registry)
+      - objetos que traigan .cr
+    """
+    if args:
+        a0 = args[0]
+        # Caso: env real
+        if hasattr(a0, "sudo") and hasattr(a0, "cr"):
+            try:
+                return a0.sudo()
+            except Exception:
+                pass
+        # Caso: trae .cr (env-like)
+        cr = getattr(a0, "cr", None)
+        if cr is not None:
+            return api.Environment(cr, SUPERUSER_ID, {})
+        # Caso: cursor directo (duck-typing)
+        if hasattr(a0, "execute"):
+            return api.Environment(a0, SUPERUSER_ID, {})
+    # Último intento: kwargs con cr
+    cr = kwargs.get("cr")
+    if cr is not None:
+        return api.Environment(cr, SUPERUSER_ID, {})
+    raise ValueError("currency_no_decimals: no se pudo construir un Environment en post_init_hook")
 
 def post_init_hook(*args, **kwargs):
-    """
-    Soporta ambas llamadas:
-      - v16: post_init_hook(cr, registry)
-      - v17/v18: post_init_hook(env)
-    """
-    if len(args) >= 2:
-        # Caso (cr, registry)
-        cr = args[0]
-        env = api.Environment(cr, SUPERUSER_ID, {})
-    else:
-        # Caso (env) directo
-        env = args[0]
-        # Si por alguna razón no es un Environment, lo reconstruimos
-        if not hasattr(env, 'cr'):
-            cr = getattr(env, 'cr', None) or kwargs.get('cr')
-            env = api.Environment(cr, SUPERUSER_ID, {})
-    _apply_no_decimals(env)
+    env = _ensure_env(*args, **kwargs)
+    # Forzar sin decimales a las monedas usadas por las compañías
+    companies = env["res.company"].search([])
+    currencies = companies.mapped("currency_id")
+    if currencies:
+        # rounding=1.0 => decimal_places = 0
+        currencies.write({"rounding": 1.0})
