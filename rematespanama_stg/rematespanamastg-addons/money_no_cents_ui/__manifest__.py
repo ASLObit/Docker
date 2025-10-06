@@ -1,6 +1,6 @@
 {
     "name": "Money No Cents (UI only)",
-    "version": "18.0.1.3",            # <— súbele versión
+    "version": "18.0.1.4",            # <— súbele versión
     "depends": ["web"],
     "assets": {
         "web.assets_backend": [

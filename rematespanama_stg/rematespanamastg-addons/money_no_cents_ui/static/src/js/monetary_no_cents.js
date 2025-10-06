@@ -1,26 +1,24 @@
 /** @odoo-module **/
 
-// 👈 paths correctos para Odoo 18
 import * as formatters from "@web/views/fields/formatters";
 import { patch } from "@web/core/utils/patch";
 import { MonetaryField } from "@web/views/fields/monetary/monetary_field";
 
-console.info("[money_no_cents_ui] parche activo");
+console.info("[money_no_cents_ui] parche activo v2");
 
-// Guardamos referencias originales
-const _origFormatMonetary = formatters.formatMonetary;
-const _origFormatFloat = formatters.formatFloat;
+// Guardamos funciones originales
+const _fmtMonetary = formatters.formatMonetary;
+const _fmtFloat = formatters.formatFloat;
 
-// Forzamos 0 decimales en los formateadores (UI)
-formatters.formatMonetary = function (value, options = {}) {
-    return _origFormatMonetary(value, { ...options, digits: 0 });
-};
-formatters.formatFloat = function (value, options = {}) {
-    return _origFormatFloat(value, { ...options, digits: 0 });
-};
+// Forzamos 0 decimales en formateadores (UI)
+formatters.formatMonetary = (value, options = {}) =>
+    _fmtMonetary(value, { ...options, digits: 0 });
 
-// Y también en el widget Monetary (listas/ formularios)
-patch(MonetaryField.prototype, "money_no_cents_ui.patch", {
+formatters.formatFloat = (value, options = {}) =>
+    _fmtFloat(value, { ...options, digits: 0 });
+
+// Odoo 18 => patch(target, props)  (SIN el nombre intermedio)
+patch(MonetaryField.prototype, {
     format(value) {
         return formatters.formatMonetary(value, {
             currency: this.props.currency,
