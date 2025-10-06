@@ -1,9 +1,6 @@
-# coding: utf-8
 {
     "name": "Money No Cents (UI only)",
-    "version": "18.0.1.1",  # ⬅️ súbela para forzar actualización
-    "summary": "Muestra importes monetarios sin decimales en la interfaz",
-    "category": "Tools",
+    "version": "18.0.1.3",            # <— súbele versión
     "depends": ["web"],
     "assets": {
         "web.assets_backend": [
