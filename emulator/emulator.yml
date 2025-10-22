@@ -14,6 +14,6 @@ services:
       - /var/lib/docker/volumes/emulator_data/roms:/data/roms
       - /var/lib/docker/volumes/emulator_data/assets:/data/assets
     ports:
-      - "3000:3000"   # panel de administración
+      - "3100:3000"   # panel de administración
       - "8088:80"     # frontend público (jugar)
     restart: unless-stopped
