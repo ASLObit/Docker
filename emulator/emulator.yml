@@ -11,9 +11,8 @@ services:
       - TZ=America/Bogota
     volumes:
       - /var/lib/docker/volumes/emulator_data/emulatorjs/config:/config
-      - /var/lib/docker/volumes/emulator_data/roms:/data/roms
-      - /var/lib/docker/volumes/emulator_data/assets:/data/assets
+      - /var/lib/docker/volumes/emulator_data:/data
     ports:
-      - "3100:3000"   # panel de administración
-      - "8088:80"     # frontend público (jugar)
+      - "3100:3000"   # panel
+      - "8088:80"     # frontend
     restart: unless-stopped
