@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  retroarch:
+    image: lscr.io/linuxserver/retroarch:latest
+    container_name: retroarch
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Bogota
+    volumes:
+      - /var/lib/docker/volumes/emulator_data/retroarch/config:/config
+      - /var/lib/docker/volumes/emulator_data/roms:/roms
+      - /var/lib/docker/volumes/emulator_data/bios:/bios
+    devices:
+      - /dev/dri:/dev/dri              # aceleración GPU Intel/AMD
+      # Para NVIDIA:
+      # deploy:
+      #   resources:
+      #     reservations:
+      #       devices:
+      #         - capabilities: [gpu]
+      #           driver: nvidia
+      #           count: all
+    network_mode: host
+    restart: unless-stopped
+
+  esde:
+    image: ghcr.io/games-on-whales/es-de:latest
+    container_name: es-de
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Bogota
+    volumes:
+      - /var/lib/docker/volumes/emulator_data/es-de/config:/config
+      - /var/lib/docker/volumes/emulator_data/roms:/roms
+      - /var/lib/docker/volumes/emulator_data/bios:/bios
+    network_mode: host
+    depends_on:
+      - retroarch
+    restart: unless-stopped
